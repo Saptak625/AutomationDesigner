@@ -1,3 +1,4 @@
+from os.path import exists
 import re
 
 class AutoP:
@@ -5,8 +6,9 @@ class AutoP:
     self.name = name
   
   def new(self):
-    with open(f'auto/{self.name}.autop', 'w') as f:
-      f.write('import ${\n\n}$\n\nfunction ${\n\n}$')
+    if not exists(f'auto/{self.name}.autop'):
+      with open(f'auto/{self.name}.autop', 'w') as f:
+        f.write('import ${\n\n}$\n\nfunction ${\n\n}$')
 
   def generate(self):
     program = None

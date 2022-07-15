@@ -58,6 +58,6 @@ def choiceInput(choices, select, inputType, *args):
         print("Please choose a field listed above that you have not entered.\n")
       else:
         inArgs = [f'{s}: ']+list(args)
-        results[s] = inputType(*inArgs)
+        results[s] = None if inputType is None else inputType(*inArgs)
         break
   return results
