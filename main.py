@@ -2,10 +2,9 @@ from includes.matrix import Matrix
 from includes.fraction import Fraction as F
 from includes.inputs import numericInput, choiceInput
 from includes.matrix_calculator import matrix_calculator
+from includes.equation import Equation
 
 from autop import AutoP
-
-from sympy import *
 
 # m1=Matrix([[F(1,1) for i in range(5)] for j in range(5)])
 # m2=Matrix([[F(1,1) for i in range(5)] for j in range(5)])
@@ -34,4 +33,14 @@ from sympy import *
 # print(a)
 # matrix_calculator()
 
-print(choiceInput(['s', 'u', 'v', 'a', 't'], 3, numericInput, float))
+# print(choiceInput(['s', 'u', 'v', 'a', 't'], 3, numericInput, float))
+
+# e = Equation(['s', 'u', 'v', 'a', 't'], 's', 'u*t+(a*t**2)/2')
+# print(e)
+# new = e.rearrange('t')[0]
+# print(new)
+# print(new.replace({'s': 0, 'u': 1.0, 'a': F(1, 1)}))
+# print(new.substitute({'s': 0, 'u': 1.0, 'a': F(1, 1)}))
+
+p = AutoP('Kinematics_Solver')
+p.makeFile()
