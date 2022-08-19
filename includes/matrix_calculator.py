@@ -1,9 +1,10 @@
 from includes.inputs import menu, stringInput as sInput, numericInput as nInput, matrixInput as mInput
 from includes.matrix import Matrix as M
 from includes.fraction import Fraction as F
+from includes.title import title
 
 def matrix_calculator():
-  print('---------------------------------Matrix Calculator---------------------------------')
+  title('Matrix Calculator')
   def matrixLabels(matrices):
     return [f'[{chr(i+65)}] {m.dimensions()[0]}x{m.dimensions()[1]}' if m else f'[{chr(i+65)}] (empty)' for i, m in enumerate(matrices)]
 

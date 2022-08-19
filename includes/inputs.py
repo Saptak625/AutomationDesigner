@@ -48,8 +48,11 @@ def matrixInput():
   rows = numericInput('Rows: ', int, Fraction)
   return Matrix([[numericInput(f'Position ({i}, {j})\nElement(Fraction or integer): ', int, Fraction) for j in range(rows)] for i in range(columns)])
 
-def choiceInput(choices, select, inputType, *args):
-  print(f'Choose {select} from {", ".join(choices)}.')
+def choiceInput(choices, select, inputType, *args, ask=False):
+  if select+1 == len(choices):
+    print(f'Choose as many from {", ".join(choices)}.')
+  else:
+    print(f'Choose {select} from {", ".join(choices)}.')
   results = {}
   for i in range(select):
     while True:
@@ -60,4 +63,14 @@ def choiceInput(choices, select, inputType, *args):
         inArgs = [f'{s}: ']+list(args)
         results[s] = None if inputType is None else inputType(*inArgs)
         break
+    if ask and i+1 != select:
+      if not booleanInput("Enter more fields?"):
+        break
   return results
+
+def booleanInput(prompt):
+  while True:
+    i = input(prompt+" (y/n): ")
+    if 'y' in i or 'n' in i:
+      print()
+      return 'y' in i #y has precedence

@@ -1,0 +1,9 @@
+import ${
+physicssolver: PhysicsSolver
+physicsequations: variables, equations
+}$
+
+function ${
+  p=PhysicsSolver("Physics Solver", variables(), equations())
+  p.solve()
+}$
