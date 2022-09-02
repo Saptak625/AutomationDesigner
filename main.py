@@ -10,3 +10,9 @@ from includes.physics_solver import physics_solver
 from autop import AutoP
 
 # physics_solver()
+# s=SigFig('423')
+# print(s.roundToSigFigs(1))
+# matrix_calculator()
+m=Matrix([[1, 0, 5, 6], [9, 0, 2, 0], [18, 0, 4, 0]])
+m.gaussjordanElimination()
+print(m)
