@@ -63,13 +63,12 @@ class Matrix:
       if nonZero != None:
         if one != None:
           self.rowSwap(rowIndex, one)
-          if self.printWork: print(self)
         else:
           self.rowMultiplication(
             Fraction.inverse(self.matrix[nonZero][columnIndex]),
             nonZero)
           self.rowSwap(rowIndex, nonZero)
-          if self.printWork: print(self)
+        if self.printWork: print(self)
         for i in range(rowIndex + 1, len(self.matrix)):
           if self.matrix[i][columnIndex] != Fraction(0, 1):
             self.rowMultiplication(-self.matrix[i][columnIndex], rowIndex)
