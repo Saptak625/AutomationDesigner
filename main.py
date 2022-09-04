@@ -5,9 +5,10 @@ from includes.equation import Equation
 from includes.sigfig import SigFig
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
+from includes.chemistry.chemicalequation import ChemicalEquation
 
 from includes.matrix_calculator import matrix_calculator
-from includes.physics_solver import physics_solver
+from includes.physics.physics_solver import physics_solver
 
 from autop import AutoP
 
@@ -19,5 +20,12 @@ from autop import AutoP
 # m.gaussjordanElimination()
 # print(m)
 
-print(Compound('[Cr(N2H4CO)6]4[Cr(CN)6]3').composition)
+# print(Compound('3[Cr(N2H4CO)6]4[Cr(CN)6]3 (s)'))
+# print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
+
+# AutoP('physics/physics_solver').generate()
+
+c = ChemicalEquation('K4Fe(CN)6 + KMnO4 + H2SO4 = KHSO4 + Fe2(SO4)3 + MnSO4 + HNO3 + CO2 + H2O')
+c.solve()
+print(c)

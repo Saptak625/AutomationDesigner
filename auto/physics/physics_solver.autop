@@ -1,6 +1,6 @@
 import ${
-physicssolver: PhysicsSolver
-physicsequations: variables, equations
+physics.physicssolver: PhysicsSolver
+physics.physicsequations: variables, equations
 }$
 
 function ${

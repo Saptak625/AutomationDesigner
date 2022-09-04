@@ -24,7 +24,8 @@ class AutoP:
       generatedCode += f'from includes.{filename} import {imports}\n'
 
     #Function Section
-    generatedCode += f'\ndef {self.name}():\n' + code[1]
+    functionName = self.name.split('/')[-1]
+    generatedCode += f'\ndef {functionName}():\n' + code[1]
 
     #Generate File
     with open(f'includes/{self.name}.py', 'w') as f:

@@ -37,3 +37,9 @@ class Element:
 
   def __repr__(self):
     return self.string
+
+  def __eq__(self, other):
+    return self.string == other.string
+
+  def __hash__(self):
+    return hash(self.string)
