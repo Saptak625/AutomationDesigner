@@ -1,3 +1,4 @@
+import os
 from os.path import exists
 import re
 
@@ -6,6 +7,9 @@ class AutoP:
     self.name = name
   
   def new(self):
+    directory = 'auto/'+'/'.join(self.name.split('/')[:-1])
+    if not os.path.exists(directory):
+      os.makedirs(directory)
     if not exists(f'auto/{self.name}.autop'):
       with open(f'auto/{self.name}.autop', 'w') as f:
         f.write('import ${\n\n}$\n\nfunction ${\n\n}$')
@@ -20,13 +24,17 @@ class AutoP:
     generatedCode = ''
     #Imports Section
     for i in code[0].split('\n'):
-      filename, imports = i.split(': ')
-      generatedCode += f'from includes.{filename} import {imports}\n'
+      if ': ' in i:
+        filename, imports = i.split(': ')
+        generatedCode += f'from includes.{filename} import {imports}\n'
 
     #Function Section
     functionName = self.name.split('/')[-1]
     generatedCode += f'\ndef {functionName}():\n' + code[1]
 
     #Generate File
+    directory = 'includes/'+'/'.join(self.name.split('/')[:-1])
+    if not os.path.exists(directory):
+      os.makedirs(directory)
     with open(f'includes/{self.name}.py', 'w') as f:
       f.write(generatedCode)

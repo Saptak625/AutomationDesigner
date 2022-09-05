@@ -48,7 +48,7 @@ class ChemicalEquation(Parser):
 
   def solve(self):
     self.matrix.gaussjordanElimination()
-    solutions = [row[-1] for row in self.matrix.matrix] + [Fraction(1, 1)]
+    solutions = [row[-1] for row in self.matrix.matrix if row[-1] != Fraction(0, 1)] + [Fraction(1, 1)]
     multiple = 1
     for s in solutions:
       multiple = lcm(multiple, s.denominator)

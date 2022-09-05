@@ -9,6 +9,7 @@ from includes.chemistry.chemicalequation import ChemicalEquation
 
 from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
+from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 
 from autop import AutoP
 
@@ -24,8 +25,12 @@ from autop import AutoP
 # print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
 
-# AutoP('physics/physics_solver').generate()
+p=AutoP('chemistry/hello/hi/chemical_equation_solver')
+p.new()
+p.generate()
 
-c = ChemicalEquation('K4Fe(CN)6 + KMnO4 + H2SO4 = KHSO4 + Fe2(SO4)3 + MnSO4 + HNO3 + CO2 + H2O')
-c.solve()
-print(c)
+# c = ChemicalEquation('3NaOH + 1H3PO4 = 1Na3PO4 + 3H2O')
+# c.solve()
+# print(c)
+
+# chemical_equation_solver()

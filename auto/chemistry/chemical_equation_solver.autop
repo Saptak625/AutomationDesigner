@@ -1,0 +1,10 @@
+import ${
+chemistry.chemicalequation: ChemicalEquation
+}$
+
+function ${
+  eq = ChemicalEquation(input('Enter whole equation seperated by "=": '))
+  eq.solve()
+  print(eq)
+  return eq
+}$

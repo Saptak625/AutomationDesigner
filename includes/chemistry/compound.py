@@ -15,7 +15,7 @@ class Compound(Parser):
     self.splitString(self.string, checks = self.split)
     for i in range(len(self.compoundString)):
       if not self.compoundString[i].isdigit():
-        self.compoundString = self.compoundString[i:]
+        self.compoundString = self.compoundString[i:].strip()
         break
     self.readByCharacter(self.compoundString, checks = self.checks, endSetup = self.save)
   
