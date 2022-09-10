@@ -12,7 +12,7 @@ class AutoP:
       os.makedirs(directory)
     if not exists(f'auto/{self.name}.autop'):
       with open(f'auto/{self.name}.autop', 'w') as f:
-        f.write('import ${\n\n}$\n\nfunction ${\n\n}$')
+        f.write('import ${\n\n}$\n\nfunction ${\n\tpass\n}$\n\nclass ${{name}\n\tpass\n}$')
 
   def generate(self):
     program = None
@@ -26,11 +26,19 @@ class AutoP:
     for i in code[0].split('\n'):
       if ': ' in i:
         filename, imports = i.split(': ')
-        generatedCode += f'from includes.{filename} import {imports}\n'
+        if filename:
+          generatedCode += f'from includes.{filename} import {imports}\n'
+        else:
+          generatedCode += f'import {imports}\n'
 
     #Function Section
     functionName = self.name.split('/')[-1]
     generatedCode += f'\ndef {functionName}():\n' + code[1]
+
+    #Class Section
+    classString = code[2].split('\n')[0]
+    className = classString.replace('{', '').replace('}', '')
+    generatedCode += f'\n\nclass {className}:\n' + code[2].replace(classString, '')[1:]
 
     #Generate File
     directory = 'includes/'+'/'.join(self.name.split('/')[:-1])

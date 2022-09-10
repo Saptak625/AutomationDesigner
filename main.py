@@ -11,7 +11,9 @@ from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
 from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 
+
 from autop import AutoP
+from packager import Packager
 
 # physics_solver()
 # s=SigFig('423')
@@ -25,12 +27,17 @@ from autop import AutoP
 # print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
 
-p=AutoP('chemistry/hello/hi/chemical_equation_solver')
+p=AutoP('chemistry/chemical_node_charts')
 p.new()
 p.generate()
+
+from includes.chemistry.chemical_node_charts import chemical_node_charts
+chemical_node_charts()
 
 # c = ChemicalEquation('3NaOH + 1H3PO4 = 1Na3PO4 + 3H2O')
 # c.solve()
 # print(c)
 
 # chemical_equation_solver()
+
+# Packager('Chemistry Bundle',['includes/chemistry/chemical_equation_solver.py']).package()
