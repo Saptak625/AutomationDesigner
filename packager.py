@@ -39,6 +39,13 @@ class Packager:
       if not os.path.exists(directory):
         os.makedirs(directory)
       shutil.copy('/'.join(p)+".py", path)
+    for p in self.paths:
+      splitPath = p.split('/')
+      path = 'packages/' + '/'.join(splitPath)
+      directory = 'packages/' + '/'.join(splitPath[:-1])
+      if not os.path.exists(directory):
+        os.makedirs(directory)
+      shutil.copy(p, path)
     shutil.make_archive('packages/includes', 'zip', 'packages/', 'includes')
     os.rename('packages/includes.zip', f'packages/{self.name}.zip')
     shutil.rmtree('packages/includes')

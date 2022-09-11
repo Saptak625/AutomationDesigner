@@ -27,9 +27,9 @@ from packager import Packager
 # print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
 
-p=AutoP('chemistry/chemical_node_charts')
-p.new()
-p.generate()
+# p=AutoP('chemistry/chemical_node_charts')
+# p.new()
+# p.generate()
 
 from includes.chemistry.chemical_node_charts import chemical_node_charts
 print(chemical_node_charts())
@@ -40,4 +40,4 @@ print(chemical_node_charts())
 
 # chemical_equation_solver()
 
-# Packager('Chemistry Bundle',['includes/chemistry/chemical_equation_solver.py']).package()
+# Packager('Chemistry Bundle',['includes/chemistry/chemical_equation_solver.py', 'includes/chemistry/chemical_node_charts.py']).package()
