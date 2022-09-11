@@ -80,6 +80,11 @@ def chemical_node_charts():
       break
     print('Next Iter')
   print(layers)
+  jsonOutput = {}
+  for layer in layers:
+    for n in layer:
+      jsonOutput[str(n)] = n.jsonify()
+  return jsonOutput
 
 class ChemicalEquationStateNode:
   def __init__(self, state, connections, subNodes = None, variablesUsed = 0):
@@ -93,11 +98,14 @@ class ChemicalEquationStateNode:
   def addSubNode(self, sub):
     self.subNodes.append(sub)
 
+  def jsonify(self):
+    return {'state': [str(i) for i in self.state], 'subNodes': self.subNodes, 'variablesUsed': self.variablesUsed, 'success': self.success, 'fail': self.fail}
+
   def __eq__(self, other):
     return set(self.state) == set(other.state) and self.variablesUsed == other.variablesUsed
 
   def __str__(self):
-    return str(self.state) + ": " + str(self.connections)
+    return str(self.state) + " " + str(self.variablesUsed)
 
   def __repr__(self):
     return str(self)

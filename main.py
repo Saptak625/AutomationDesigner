@@ -32,7 +32,7 @@ p.new()
 p.generate()
 
 from includes.chemistry.chemical_node_charts import chemical_node_charts
-chemical_node_charts()
+print(chemical_node_charts())
 
 # c = ChemicalEquation('3NaOH + 1H3PO4 = 1Na3PO4 + 3H2O')
 # c.solve()
