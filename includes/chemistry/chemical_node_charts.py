@@ -1,13 +1,20 @@
 from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.fraction import Fraction as F
 from includes.inputs import booleanInput as bInput, numericInput as nInput
+from includes.typecheck import typecheck
 
-def chemical_node_charts():
-  equation = ChemicalEquation(input('Enter whole equation seperated by "=": '))
-  variableSpace = None
-  if bInput("Specify Variable Space"):
-    variableSpace = nInput("Variable Space: ", int)
-  idealPaths = bInput("Allow only ideal paths")
+def chemical_node_charts(equation = None, variableSpace = None, idealPaths = True):
+  typecheck(equation, ChemicalEquation)
+  typecheck(variableSpace, int, None)
+  typecheck(idealPaths, bool)
+  if equation == None:
+    equation = ChemicalEquation(input('Enter whole equation seperated by "=": '))
+    variableSpace = None
+    if bInput("Specify Variable Space"):
+      variableSpace = nInput("Variable Space: ", int)
+    idealPaths = bInput("Allow only ideal paths")
+    chemical_node_charts(equation, variableSpace, idealPaths)
+
   connections = {e: [i != F(0, 1) for i in equation.matrix.matrix[equation.elements[e]]] for e in equation.elements}
   connectionsMade = [False for i in range(len(equation.matrix.matrix[0]))]
   splitIndex = len(equation.reactantCompounds)
@@ -55,22 +62,26 @@ def chemical_node_charts():
         continue
       newRelationships = calculateRelationships(connections, node.connections, splitIndex)
       print(newRelationships)
-      allowableSteps = {i: newRelationships[i] for i in newRelationships if newRelationships[i] in ['oneleft', 'onetoone']}
-      print(allowableSteps)
+      allowableSteps1 = {i: newRelationships[i] for i in newRelationships if newRelationships[i] == 'oneleft'}
+      allowableSteps2 = {i: newRelationships[i] for i in newRelationships if newRelationships[i] == 'onetoone'}
       hasOneLeft = False
-      for s in allowableSteps:
-        if allowableSteps[s] == 'oneLeft':
-          hasOneLeft = True
-        else:
-          if idealPaths and hasOneLeft:
-            break
-        newNode = ChemicalEquationStateNode(node.state + [s], applyElement(connections, node.connections, s), variablesUsed = node.variablesUsed + (1 if allowableSteps[s] == 'onetoone' else 0))
+      for s in allowableSteps1:
+        hasOneLeft = True
+        newNode = ChemicalEquationStateNode(node.state + [s], applyElement(connections, node.connections, s), variablesUsed = node.variablesUsed)
         if newNode not in newLayer:
           newLayer.append(newNode)
         else:
-          newNode = newLayer.index(newNode)
+          newNode = newLayer[newLayer.index(newNode)]
         node.addSubNode(newNode)
-      if not len(allowableSteps):
+      if not idealPaths or not hasOneLeft:
+        for s in allowableSteps2:
+          newNode = ChemicalEquationStateNode(node.state + [s], applyElement(connections, node.connections, s), variablesUsed = node.variablesUsed + 1)
+          if newNode not in newLayer:
+            newLayer.append(newNode)
+          else:
+            newNode = newLayer[newLayer.index(newNode)]
+          node.addSubNode(newNode)
+      if not len(allowableSteps1)+len(allowableSteps2):
         print('Failed')
         node.fail = True
       print('New Node')
@@ -80,11 +91,17 @@ def chemical_node_charts():
       break
     print('Next Iter')
   print(layers)
-  jsonOutput = {}
-  for layer in layers:
+  output = []
+  index = 0
+  for i, layer in enumerate(layers):
     for n in layer:
-      jsonOutput[str(n)] = n.jsonify()
-  return jsonOutput
+      index+=1
+      n.jsonifyNode(index, i+1)
+      output.append(n)
+  edges = []
+  for node in output:
+    edges += node.jsonifyEdges()
+  return {'nodes': output, 'edges': edges}
 
 class ChemicalEquationStateNode:
   def __init__(self, state, connections, subNodes = None, variablesUsed = 0):
@@ -94,18 +111,37 @@ class ChemicalEquationStateNode:
     self.variablesUsed = variablesUsed
     self.success = False
     self.fail = False
+    self.id = None
+    self.level = None
+    self.label = None
+    self.color = "#97C2FC"
 
   def addSubNode(self, sub):
     self.subNodes.append(sub)
 
-  def jsonify(self):
-    return {'state': [str(i) for i in self.state], 'subNodes': self.subNodes, 'variablesUsed': self.variablesUsed, 'success': self.success, 'fail': self.fail}
+  def jsonifyNode(self, id, level):
+    self.id = id
+    self.level = level
+    self.label = str(self)
+    if self.success:
+      self.color = "#057a1c"
+    elif self.fail:
+      self.color = "#fc0303"
 
+  def jsonifyEdges(self):
+    edges = []
+    print(self)
+    print("hello", self.subNodes)
+    for i in self.subNodes:
+      print(type(i), i)
+      edges.append({'from': self.id, 'to': i.id, 'color': ("#fc0303" if i.variablesUsed > self.variablesUsed else "#ccc")})
+    return edges
+  
   def __eq__(self, other):
     return set(self.state) == set(other.state) and self.variablesUsed == other.variablesUsed
 
   def __str__(self):
-    return str(self.state) + " " + str(self.variablesUsed)
+    return str(self.state) + "-" + str(self.variablesUsed)
 
   def __repr__(self):
     return str(self)

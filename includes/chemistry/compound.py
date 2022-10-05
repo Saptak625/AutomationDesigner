@@ -1,7 +1,14 @@
 from includes.parser import Parser
 from includes.chemistry.element import Element
+import re
 
 class Compound(Parser):
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Compound.latexPrint = value
+    Element.setLatexPrint(value)
+  
   def __init__(self, string):
     super().__init__(string)
     self.composition = {}
@@ -18,6 +25,9 @@ class Compound(Parser):
         self.compoundString = self.compoundString[i:].strip()
         break
     self.readByCharacter(self.compoundString, checks = self.checks, endSetup = self.save)
+    self.mass = 0
+    for e in self.composition:
+      self.mass += e.mass * self.composition[e]
   
   def split(self, string):
     if '(s)' in string or '(l)' in string or '(g)' in string or '(aq)' in string:
@@ -83,5 +93,22 @@ class Compound(Parser):
     self.number = ""
     self.subString = ""
 
-  def __str__(self):
-    return self.compoundString + (f'{self.stateString}' if self.stateString else '')
+  def __str__(self, textOverride = False):
+    if Compound.latexPrint and not textOverride:
+      allCoefficients = re.findall("\d+", self.compoundString)
+      finalString = ''
+      currentIndex = 0
+      for i in allCoefficients:
+        ind = self.compoundString[currentIndex:].index(i)
+        finalString += self.compoundString[currentIndex:currentIndex + ind]+f'_{{{i}}}'
+        currentIndex = currentIndex + ind + len(i)
+      if currentIndex < len(self.compoundString):
+        finalString += self.compoundString[currentIndex:]
+      return finalString + (self.stateString if self.stateString else '')
+    return self.compoundString + (self.stateString if self.stateString else '')
+
+  def massPercentComposition(self):
+    return [['Element', 'Mass']]+[[str(i), self.composition[i]*i.mass] for i in self.composition]
+
+  def molePercentComposition(self):
+    return [['Element', 'Moles']]+[[str(i), self.composition[i]] for i in self.composition]

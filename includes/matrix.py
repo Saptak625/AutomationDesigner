@@ -2,8 +2,13 @@ from includes.typecheck import typecheckArray
 from includes.lengthcheck import lengthcheckArray
 from includes.fraction import Fraction
 
-
 class Matrix:
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Fraction.latexPrint = value
+    Matrix.latexPrint = value
+  
   def __init__(self, matrix):
     processedMatrix = matrix
     typecheckArray(matrix, Fraction, int, dimension=2)
@@ -189,6 +194,9 @@ class Matrix:
     return Matrix(product)
 
   def __str__(self):
+    if Matrix.latexPrint:
+      contents = ' \\\\ '.join([' & '.join([str(j) for j in i]) for i in self.matrix])
+      return f'\\begin{{bmatrix}}{contents}\\end{{bmatrix}}'
     return '\n'.join(
       [str(self.matrix[i]) for i in range(len(self.matrix))]) + '\n'
 

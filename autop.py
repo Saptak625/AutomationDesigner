@@ -33,12 +33,14 @@ class AutoP:
 
     #Function Section
     functionName = self.name.split('/')[-1]
-    generatedCode += f'\ndef {functionName}():\n' + code[1]
+    parameters = code[1].split('\n')[0].replace('{', '').replace('}', '')
+    generatedCode += f'\ndef {functionName}({parameters}):\n' + code[1].replace(parameters, '')[2:]
 
     #Class Section
-    classString = code[2].split('\n')[0]
-    className = classString.replace('{', '').replace('}', '')
-    generatedCode += f'\n\nclass {className}:\n' + code[2].replace(classString, '')[1:]
+    if len(code) >= 3:
+      classString = code[2].split('\n')[0]
+      className = classString.replace('{', '').replace('}', '')
+      generatedCode += f'\n\nclass {className}:\n' + code[2].replace(classString, '')[1:]
 
     #Generate File
     directory = 'includes/'+'/'.join(self.name.split('/')[:-1])

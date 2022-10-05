@@ -6,6 +6,13 @@ from includes.fraction import Fraction
 from includes.lcm import lcm
 
 class ChemicalEquation(Parser):
+  latexPrint = False
+
+  def setLatexPrint(value):
+    ChemicalEquation.latexPrint = value
+    Compound.setLatexPrint(value)
+    Matrix.setLatexPrint(value)
+  
   def __init__(self, equationString):
     super().__init__(equationString)
     self.reactantsString = ""
@@ -56,8 +63,11 @@ class ChemicalEquation(Parser):
     self.coefficients.append(solutions[:len(self.reactantCompounds)])
     self.coefficients.append(solutions[len(self.reactantCompounds):])
     
-  def formatSolution(coefficients, compounds):
-    return " + ".join([(str(coefficients[i]) if coefficients[i] != 1 else "")+str(compounds[i]) for i in range(len(compounds))])
+  def formatSolution(coefficients, compounds, textOverride):
+    return " + ".join([(str(coefficients[i]) if coefficients[i] != 1 else "")+compounds[i].__str__(textOverride = textOverride) for i in range(len(compounds))])
 
-  def __str__(self):
-    return 'Balanced Equation:\n' + ChemicalEquation.formatSolution(self.coefficients[0], self.reactantCompounds) + " = " + ChemicalEquation.formatSolution(self.coefficients[1], self.productCompounds)
+  def __str__(self, textOverride = False):
+    solution = ChemicalEquation.formatSolution(self.coefficients[0], self.reactantCompounds, textOverride) + " = " + ChemicalEquation.formatSolution(self.coefficients[1], self.productCompounds, textOverride)
+    if ChemicalEquation.latexPrint and not textOverride:
+      return solution.replace('=', '\\rightarrow')
+    return 'Balanced Equation:\n' + solution

@@ -3,6 +3,11 @@ from includes.gcd import gcd
 from includes.lcm import lcm
 
 class Fraction:
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Fraction.latexPrint = value
+  
   def __init__(self, numerator, denominator):
     typecheck(numerator, int)
     typecheck(denominator, int)
@@ -60,6 +65,10 @@ class Fraction:
     return self.numerator/self.denominator
 
   def __str__(self):
+    if Fraction.latexPrint:
+      sign = "-" if self.numerator < 0 else ""
+      unsignedNumerator = abs(self.numerator)
+      return f'{sign}\\frac{{{unsignedNumerator}}}{{{self.denominator}}}'
     return f'{self.numerator}/{self.denominator}'
 
   def __repr__(self):

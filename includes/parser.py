@@ -1,5 +1,8 @@
+from includes.typecheck import typecheck
+
 class Parser:
   def __init__(self, string):
+    typecheck(string, str)
     self.string = string
   
   def readByCharacter(self, string, startSetup = None, endSetup = None, checks = None):
