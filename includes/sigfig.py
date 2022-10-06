@@ -3,7 +3,10 @@ from decimal import Decimal, Context
 class SigFig:
   def __init__(self, value, sigfigs=None, decimals=None, constant=False):
     self.value = value
-    self.decimalValue = Decimal(value) #True Value of Decimal including extra calculation precision.
+    try:
+      self.decimalValue = Decimal(value) #True Value of Decimal including extra calculation precision.
+    except:
+      raise Exception(f'Sig Fig Error: Could not convert "{self.value}" into sig fig.')
     sign, digits, exponent = self.decimalValue.as_tuple()
     self.sigfigs = len(digits)
     self.decimal = Decimal((sign, digits, exponent)) #Sig Fig Decimal Representation
@@ -109,3 +112,9 @@ class SigFig:
 
   def __rtruediv__(self, other):
     return other / self
+
+  def abs(self):
+    if self >= SigFig('0', constant=True):
+      return self
+    else:
+      return -self

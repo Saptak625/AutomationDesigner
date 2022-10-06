@@ -3,7 +3,7 @@ from includes.fraction import Fraction as F
 from includes.inputs import numericInput, choiceInput
 from includes.equation import Equation
 from includes.sigfig import SigFig
-# from includes.scientificnotation import ScientificNotation as SN
+from includes.measurement import Measurement
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
 from includes.chemistry.chemicalequation import ChemicalEquation
@@ -18,6 +18,8 @@ from packager import Packager
 
 
 # physics_solver()
+m = Measurement('5.50', uncertainty="0.01") + Measurement('10.0', uncertainty="1") 
+print(m)
 # s = ((SigFig('3') / SigFig('1.87')) + SigFig('5.87')) * SigFig('3.14', constant=True)
 # print(s, s.sigfigs, s.decimals)
 # print(-SigFig('6.02E23', constant=True))
