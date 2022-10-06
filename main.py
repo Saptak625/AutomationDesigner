@@ -18,9 +18,9 @@ from packager import Packager
 
 
 # physics_solver()
-a=Measurement('5.50', uncertainty="2%")
-b=Measurement('10.0', uncertainty="1%")
-m = a - b 
+a=Measurement('5.50', uncertainty="2")
+b=Measurement('10.0', uncertainty="1")
+m = a * b 
 print(m, a, b)
 # s = ((SigFig('3') / SigFig('1.87')) + SigFig('5.87')) * SigFig('3.14', constant=True)
 # print(s, s.sigfigs, s.decimals)

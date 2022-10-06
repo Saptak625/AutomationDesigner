@@ -78,13 +78,13 @@ class Measurement:
     return -self + other
 
   def __mul__(self, other):
-    return SigFig(self.decimalValue * other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
-
+    return Measurement(self.sample * other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty, uncertaintyPercent=True)
+  
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
-    return SigFig(self.decimalValue / other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
-
+    return Measurement(self.sample / other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty, uncertaintyPercent=True)
+    
   def __rtruediv__(self, other):
     return other / self
