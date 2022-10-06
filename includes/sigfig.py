@@ -10,7 +10,6 @@ class SigFig:
     sign, digits, exponent = self.decimalValue.as_tuple()
     self.sigfigs = len(digits)
     self.decimal = Decimal((sign, digits, exponent)) #Sig Fig Decimal Representation
-    print(sign, digits, exponent)
     if constant:
       #Constants are assumed to be perfectly accurate for all calculations.
       self.sigfigs = float('inf')
@@ -90,7 +89,7 @@ class SigFig:
     return neg
 
   def __add__(self, other):
-    return SigFig(self.decimalValue + other.decimalValue, decimals=max(self.decimals, other.decimals))
+    return SigFig(str(self.decimalValue + other.decimalValue), decimals=max(self.decimals, other.decimals))
   
   def __radd__(self, other):
     return self + other
@@ -102,13 +101,13 @@ class SigFig:
     return -self + other
 
   def __mul__(self, other):
-    return SigFig(self.decimalValue * other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
+    return SigFig(str(self.decimalValue * other.decimalValue), sigfigs=min(self.sigfigs, other.sigfigs))
 
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
-    return SigFig(self.decimalValue / other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
+    return SigFig(str(self.decimalValue / other.decimalValue), sigfigs=min(self.sigfigs, other.sigfigs))
 
   def __rtruediv__(self, other):
     return other / self
