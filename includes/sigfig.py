@@ -10,7 +10,7 @@ class SigFig:
     sign, digits, exponent = self.decimalValue.as_tuple()
     self.sigfigs = len(digits)
     self.decimal = Decimal((sign, digits, exponent)) #Sig Fig Decimal Representation
-
+    print(sign, digits, exponent)
     if constant:
       #Constants are assumed to be perfectly accurate for all calculations.
       self.sigfigs = float('inf')
@@ -18,7 +18,7 @@ class SigFig:
     else:
       #Value has some precision that must be followed.
       #Automatic Override
-      if exponent < 0: #Decimal Value
+      if '.' in self.value: #Decimal Value
         #Force override to maintain sig fig precision
         self.decimal = SigFig.changeSigFigs(value, self.sigfigs)
         self.decimals = (exponent + self.sigfigs - 1) if -exponent >= self.sigfigs else exponent
