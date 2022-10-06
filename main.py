@@ -2,7 +2,7 @@ from includes.matrix import Matrix
 from includes.fraction import Fraction as F
 from includes.inputs import numericInput, choiceInput
 from includes.equation import Equation
-from includes.sigfig2 import SigFig
+from includes.sigfig import SigFig
 # from includes.scientificnotation import ScientificNotation as SN
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
@@ -18,9 +18,9 @@ from packager import Packager
 
 
 # physics_solver()
-print((SigFig('200.30') + SigFig('1000')))
-print(SigFig('1200.30', decimals=3).sigfigs)
-print(-SigFig('6.02E23', constant=True))
+# s = ((SigFig('3') / SigFig('1.87')) + SigFig('5.87')) * SigFig('3.14', constant=True)
+# print(s, s.sigfigs, s.decimals)
+# print(-SigFig('6.02E23', constant=True))
 # print(SigFig.changeSigFigs("0.02000", 3))
 # print(s.roundToSigFigs(1))
 # matrix_calculator()

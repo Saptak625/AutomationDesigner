@@ -1,58 +1,111 @@
-from math import floor, log10
+from decimal import Decimal, Context
 
 class SigFig:
-  def __init__(self, stringValue):
-    #Check if valid number
-    try:
-      self.value = float(stringValue)
-    except:
-      raise Exception(f'Could not convert "{stringValue}" to a float.')
-    #String Version of Value
-    sign = '-' if '-' in stringValue else ''
-    self.stringValue = stringValue.replace('-', '').lstrip('0')
-    if self.stringValue[0] == '.':
-      self.stringValue = '0'+self.stringValue
-    self.unsignedStringValue = self.stringValue
-    self.stringValue = sign+self.stringValue
-    #Determine number of sig figs for number
-    if '.' in self.stringValue:
-      if self.stringValue[-1] == '.':
-        self.sigfigs = len(self.unsignedStringValue) - 1
-      else:
-        if self.unsignedStringValue[0] == '0':
-          self.sigfigs = len(self.unsignedStringValue.replace('0.', '').lstrip('0'))
-        else:
-          self.sigfigs = len(self.unsignedStringValue) - 1
-    else:
-      self.sigfigs = len(self.unsignedStringValue.rstrip('0'))
+  def __init__(self, value, sigfigs=None, decimals=None, constant=False):
+    self.value = value
+    self.decimalValue = Decimal(value) #True Value of Decimal including extra calculation precision.
+    sign, digits, exponent = self.decimalValue.as_tuple()
+    self.sigfigs = len(digits)
+    self.decimal = Decimal((sign, digits, exponent)) #Sig Fig Decimal Representation
 
-  def roundToSigFigs(self, sigfigs):
-    if self.sigfigs > sigfigs:
-      lastDigitBefore = self.stringValue[self.sigfigs - sigfigs]
-      if lastDigitBefore != '.':
-        if round(float(lastDigitBefore)/10): #Rounds up
-          pass
-        else: #Round down
-          print('hello')
-          firstString = self.stringValue[:self.sigfigs - sigfigs - 1]
-        #Add 0 and . after getting only front of string.
-        return SigFig()
-    elif self.sigfigs < sigfigs:
-      if '.' in self.stringValue:
-        return SigFig(self.stringValue + ('0'*(sigfigs-self.sigfigs)))
+    if constant:
+      #Constants are assumed to be perfectly accurate for all calculations.
+      self.sigfigs = float('inf')
+      self.decimals = float('-inf')
+    else:
+      #Value has some precision that must be followed.
+      #Automatic Override
+      if exponent < 0: #Decimal Value
+        #Force override to maintain sig fig precision
+        self.decimal = SigFig.changeSigFigs(value, self.sigfigs)
+        self.decimals = (exponent + self.sigfigs - 1) if -exponent >= self.sigfigs else exponent
       else:
-        #Bit broken for numbers like 400 where sig figs are meant to be tens place, but cannot be representated properly.
-        return SigFig(self.stringValue + '.' + ('0'*(sigfigs-self.sigfigs+(-1 if self.stringValue[-1] == '0' else 0))))
-    return self.deepCopy()
+        newSigfigs = len([int(i) for i in ''.join([str(i) for i in digits]).rstrip('0')])
+        if newSigfigs != self.sigfigs and newSigfigs > 0:
+          self.decimal = SigFig.changeSigFigs(value, newSigfigs)
+          self.sigfigs = newSigfigs
+        self.decimals = len(digits) - self.sigfigs
+  
+      #Manual override for sigfig or decimal precision.
+      if sigfigs != None:
+        self.sigfigs = sigfigs
+        self.decimal = SigFig.changeSigFigs(value, sigfigs)
+        sign, digits, exponent = self.decimal.as_tuple()
+        if exponent < 0: #Decimal Value
+          self.decimals = exponent
+        else:
+          self.decimals = len(digits) - self.sigfigs
+      elif decimals != None:
+        self.decimals = decimals
+        self.decimal = self.decimal.quantize(Decimal(f"1E{self.decimals}"))
+        sign, digits, exponent = self.decimal.as_tuple()
+        self.sigfigs = len(digits) - self.decimals + exponent
+
+  def changeSigFigs(value, sigfigs):
+    sign, digits, exponent = Context(prec=sigfigs).create_decimal(value).as_tuple()
+    if len(digits) < sigfigs:
+      missing = sigfigs - len(digits)
+      digits = digits + (0,) * missing
+      exponent -= missing
+    return Decimal((sign, digits, exponent))
 
   def deepCopy(self):
-    return SigFig(self.stringValue)
-
-  def __eq__(self, other):
-    return self.sigfigs == other.sigfigs and self.value == other.value
-
+    new = SigFig('0')
+    new.value = self.value
+    new.decimalValue = self.decimalValue
+    new.decimal = self.decimal
+    new.sigfigs = self.sigfigs
+    new.decimals = self.decimals
+    return new
+  
   def __str__(self):
-    return self.stringValue
+    return str(self.decimal)
 
   def __repr__(self):
-    return self.stringValue
+    return str(self)
+
+  def __eq__(self, other):
+    return self.decimalValue == other.decimalValue
+
+  def __lt__(self, other):
+    return self.decimalValue < other.decimalValue
+
+  def __gt__(self, other):
+    return self.decimalValue > other.decimalValue
+
+  def __le__(self, other):
+    return self < other or self == other
+
+  def __ge__(self, other):
+    return self > other or self == other
+  
+  def __neg__(self):
+    neg = self.deepCopy()
+    neg.value = self.value.replace('-', '') if '-' in self.value else f'-{self.value}'
+    neg.decimal = -self.decimal
+    neg.decimalValue = -self.decimalValue
+    return neg
+
+  def __add__(self, other):
+    return SigFig(self.decimalValue + other.decimalValue, decimals=max(self.decimals, other.decimals))
+  
+  def __radd__(self, other):
+    return self + other
+  
+  def __sub__(self, other):
+    return -other + self
+
+  def __rsub__(self, other):
+    return -self + other
+
+  def __mul__(self, other):
+    return SigFig(self.decimalValue * other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
+
+  def __rmul__(self, other):
+    return self * other
+
+  def __truediv__(self, other):
+    return SigFig(self.decimalValue / other.decimalValue, sigfigs=min(self.sigfigs, other.sigfigs))
+
+  def __rtruediv__(self, other):
+    return other / self
