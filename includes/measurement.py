@@ -80,6 +80,15 @@ class Measurement:
                 newDUnits.append(i)
             newDUnits.append(i)
           self.dUnits = newDUnits
+    newNUnits = self.nUnits
+    newDUnits = self.dUnits
+    for i in self.nUnits:
+      if i in newDUnits:
+        newNUnits.remove(i)
+        newDUnits.remove(i)
+    #Sort units alphabetically
+    self.nUnits=sorted(newNUnits)
+    self.dUnits=sorted(newDUnits)
 
   def fromStr(string):
     sample = string.strip()
@@ -136,22 +145,46 @@ class Measurement:
     return Measurement(self.sample.deepCopy(), uncertainty = self.uncertainty.deepCopy() if self.uncertainty is not None else None, uncertaintyPercent = self.uncertaintyPercent)
   
   def __str__(self):
-    return str(self.sample) + (f' +/- {self.uncertainty}' + ('%' if self.uncertaintyPercent else '') if isinstance(self.uncertainty, SigFig) else '') + (f' {self.units}' if self.units is not None else '')
+    return str(self.sample) + (f' +/- {self.uncertainty}' + ('%' if self.uncertaintyPercent else '') if isinstance(self.uncertainty, SigFig) else '') + (f' {Measurement.formatUnits(self.nUnits, self.dUnits)}' if self.units is not None else '')
 
   def __repr__(self):
     return str(self)
 
+  def multUnits(nUnits1, dUnits1, nUnits2, dUnits2):
+    nUnits = nUnits1 + nUnits2
+    dUnits = dUnits1 + dUnits2
+    newNUnits = nUnits
+    newDUnits = dUnits
+    for i in nUnits:
+      if i in newDUnits:
+        newNUnits.remove(i)
+        newDUnits.remove(i)
+    return (sorted(newNUnits), sorted(newDUnits))
+
+  def formatUnits(nUnits, dUnits):
+    combinedNUnits = [i if nUnits.count(i) == 1 else f'{i}^{nUnits.count(i)}' for i in set(nUnits)]
+    combinedDUnits = [i if dUnits.count(i) == 1 else f'{i}^{dUnits.count(i)}' for i in set(dUnits)]
+    nUnitsStr = '1' if not nUnits else '*'.join(combinedNUnits)
+    dUnitsStr = '' if not dUnits else '*'.join(combinedDUnits)
+    if len(combinedNUnits) > 1:
+      nUnitsStr = '(' + nUnitsStr + ')'
+    if len(combinedDUnits) > 1:
+      dUnitsStr = '(' + dUnitsStr + ')'
+    return '' if nUnitsStr == '1' and dUnitsStr == '' else nUnitsStr + (f'/{dUnitsStr}' if dUnitsStr else '')
+    
   def __neg__(self):
     neg = self.deepCopy()
     neg.sample = -self.sample
     return neg
 
   def __add__(self, other):
+    if self.nUnits != other.nUnits or self.dUnits != other.dUnits:
+      raise Exception(f'Measurement Error: Cannot add {self} and {other} with different units.')
     uSum = SigFig('0', constant=True)
     uncertainties = [Measurement.absolute(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:
       uSum += u
-    return Measurement(self.sample + other.sample, uncertainty=uSum)
+    return Measurement(self.sample + other.sample, uncertainty=uSum, units=self.units)
   
   def __radd__(self, other):
     return self + other
@@ -167,7 +200,8 @@ class Measurement:
     uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:
       uSum += u
-    return Measurement(self.sample * other.sample, uncertainty=uSum, uncertaintyPercent=True)
+    nUnits, dUnits = Measurement.multUnits(self.nUnits, self.dUnits, other.nUnits, other.dUnits)
+    return Measurement(self.sample * other.sample, uncertainty=uSum, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
   
   def __rmul__(self, other):
     return self * other
@@ -177,7 +211,8 @@ class Measurement:
     uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:
       uSum += u
-    return Measurement(self.sample / other.sample, uncertainty=uSum, uncertaintyPercent=True)
+    nUnits, dUnits = Measurement.multUnits(self.nUnits, self.dUnits, other.dUnits, other.nUnits)
+    return Measurement(self.sample / other.sample, uncertainty=uSum, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
     
   def __rtruediv__(self, other):
     return other / self
