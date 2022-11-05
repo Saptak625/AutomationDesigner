@@ -5,7 +5,9 @@ class Factor:
     #Measurements
     self.numeratorM = numeratorM
     self.denominatorM = denominatorM
+    print('Factor', self.numeratorM.sample.sigfigs, self.denominatorM.sample.sigfigs)
     self.value = numeratorM / denominatorM
+    print('Value', self.value.sample.sigfigs)
 
   def fromStr(string):
     try:

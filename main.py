@@ -14,7 +14,6 @@ from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
 from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 
-
 from autop import AutoP
 from packager import Packager
 
@@ -50,9 +49,13 @@ from packager import Packager
 # print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
 
-# p=AutoP('chemistry/chemical_node_charts')
-# p.new()
-# p.generate()
+p=AutoP('chemistry/stoichiometry')
+p.new()
+p.generate()
+
+from includes.chemistry.stoichiometry import stoichiometry
+
+stoichiometry(eq=ChemicalEquation('H2 + O2 = H2O'), s=Compound('O2'), e=Compound('H2O'), m=Measurement.fromStr('5.50d g O2'))
 # SN('6.7')
 
 # from includes.chemistry.chemical_node_charts import chemical_node_charts

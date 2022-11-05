@@ -89,6 +89,8 @@ class Measurement:
     #Sort units alphabetically
     self.nUnits=sorted(newNUnits)
     self.dUnits=sorted(newDUnits)
+    #Reformat units string
+    self.units = Measurement.formatUnits(self.nUnits, self.dUnits)
 
   def fromStr(string):
     sample = string.strip()
@@ -172,7 +174,7 @@ class Measurement:
       nUnitsStr = '(' + nUnitsStr + ')'
     if len(combinedDUnits) > 1:
       dUnitsStr = '(' + dUnitsStr + ')'
-    return '' if nUnitsStr == '1' and dUnitsStr == '' else nUnitsStr + (f'/{dUnitsStr}' if dUnitsStr else '')
+    return None if nUnitsStr == '1' and dUnitsStr == '' else nUnitsStr + (f'/{dUnitsStr}' if dUnitsStr else '')
     
   def __neg__(self):
     neg = self.deepCopy()

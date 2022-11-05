@@ -29,7 +29,7 @@ class SigFig:
         self.decimals = len(digits) - self.sigfigs
   
       #Manual override for sigfig or decimal precision.
-      if sigfigs != None:
+      if sigfigs != None and sigfigs != float("inf"):
         self.sigfigs = sigfigs
         self.decimal = SigFig.changeSigFigs(value, sigfigs)
         sign, digits, exponent = self.decimal.as_tuple()
@@ -89,7 +89,8 @@ class SigFig:
     return neg
 
   def __add__(self, other):
-    return SigFig(str(self.decimalValue + other.decimalValue), decimals=max(self.decimals, other.decimals))
+    decimals = max(self.decimals, other.decimals)
+    return SigFig(str(self.decimalValue + other.decimalValue), decimals=decimals, constant=decimals == float('-inf'))
   
   def __radd__(self, other):
     return self + other
@@ -101,13 +102,15 @@ class SigFig:
     return -self + other
 
   def __mul__(self, other):
-    return SigFig(str(self.decimalValue * other.decimalValue), sigfigs=min(self.sigfigs, other.sigfigs))
+    sigfigs = min(self.sigfigs, other.sigfigs)
+    return SigFig(str(self.decimalValue * other.decimalValue), sigfigs=sigfigs, constant=sigfigs == float('inf'))
 
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
-    return SigFig(str(self.decimalValue / other.decimalValue), sigfigs=min(self.sigfigs, other.sigfigs))
+    sigfigs = min(self.sigfigs, other.sigfigs)
+    return SigFig(str(self.decimalValue / other.decimalValue), sigfigs=sigfigs, constant=sigfigs == float('inf'))
 
   def __rtruediv__(self, other):
     return other / self

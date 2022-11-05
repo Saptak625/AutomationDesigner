@@ -1,5 +1,6 @@
 from includes.parser import Parser
 from includes.chemistry.element import Element
+from includes.measurement import Measurement
 import re
 
 class Compound(Parser):
@@ -25,9 +26,9 @@ class Compound(Parser):
         self.compoundString = self.compoundString[i:].strip()
         break
     self.readByCharacter(self.compoundString, checks = self.checks, endSetup = self.save)
-    self.mass = 0
+    self.mass = Measurement.fromStr('0c')
     for e in self.composition:
-      self.mass += e.mass * self.composition[e]
+      self.mass += (e.mass * Measurement(str(self.composition[e]), precision=float('inf')))
   
   def split(self, string):
     if '(s)' in string or '(l)' in string or '(g)' in string or '(aq)' in string:
@@ -107,6 +108,12 @@ class Compound(Parser):
       return finalString + (self.stateString if self.stateString else '')
     return self.compoundString + (self.stateString if self.stateString else '')
 
+  def __eq__(self, other):
+    return self.composition == other.composition
+
+  def __ne__(self, other):
+    return self.composition != other.composition
+  
   def massPercentComposition(self):
     return [['Element', 'Mass']]+[[str(i), self.composition[i]*i.mass] for i in self.composition]
 
