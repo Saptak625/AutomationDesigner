@@ -50,9 +50,6 @@ class Packager:
     os.rename('packages/includes.zip', f'packages/{self.name}.zip')
     shutil.rmtree('packages/includes')
 
-  def zip(self):
-    pass
-
   def __str__(self):
     return str(self.paths)+":\n"+'\n'.join([str('/'.join(imp)) for imp in self.get_imports()])
 

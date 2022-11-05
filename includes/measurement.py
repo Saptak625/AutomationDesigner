@@ -1,7 +1,7 @@
 from includes.sigfig import SigFig
 
 class Measurement:
-  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False, units="", P=None, U=None, UP=False, D=False, A=False, UN=""):
+  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False, units=None, P=None, U=None, UP=False, D=False, A=False, UN=None):
     if P is not None:
       precision = P
     if U is not None:
@@ -12,7 +12,7 @@ class Measurement:
       digital = D
     if A:
       analog = A
-    if UN != "":
+    if UN is not None:
       units = UN
     
     if not isinstance(sample, SigFig):
@@ -51,20 +51,49 @@ class Measurement:
       self.uncertainty = SigFig(str(self.uncertainty.decimalValue), sigfigs=(2 if self.uncertainty < SigFig('2', constant=True) else 1))
 
     #Determine Units
-    self.nUnits = units.replace(' ', '').split('*')
+    #Will use units class to allow for conversions later.
+    self.units = units
+    self.nUnits = self.units.replace(' ', '').split('*') if self.units is not None else []
     self.dUnits = []
-    if '/' in units:
-      nUnitsStr, dUnitsStr = units.split('/')
-      self.nUnits = nUnitsStr.replace(' ', '').split('*')
-      self.dUnits = dUnitsStr.replace(' ', '').split('*')
+    if self.units is not None:
+      if '/' in units:
+        nUnitsStr, dUnitsStr = self.units.split('/')
+        nUnitsStr = nUnitsStr.strip('() ').replace(' ', '')
+        dUnitsStr = dUnitsStr.strip('() ').replace(' ', '')
+        self.nUnits = nUnitsStr.split('*')
+        self.dUnits = dUnitsStr.split('*')
+        if '^' in nUnitsStr:
+          newNUnits = []
+          for i in self.nUnits:
+            if '^' in i:
+              i, repeat = i.split('^')
+              for n in range(int(repeat)-1):
+                newNUnits.append(i)
+            newNUnits.append(i)
+          self.nUnits = newNUnits
+        if '^' in dUnitsStr:
+          newDUnits = []
+          for i in self.dUnits:
+            if '^' in i:
+              i, repeat = i.split('^')
+              for n in range(int(repeat)-1):
+                newDUnits.append(i)
+            newDUnits.append(i)
+          self.dUnits = newDUnits
 
   def fromStr(string):
-    sample = string
+    sample = string.strip()
     uncertainty = None
-    if '+/-' in string:
-      sample, uncertainty = string.split('+/-')
-    elif '+-' in string:
-      sample, uncertainty = string.split('+-')
+    units = None
+    values = sample.split(' ')
+    if '+/-' or '+-' in sample:
+      if len(values) == 3:
+        if '+/-' in sample:
+          sample, uncertainty = string.split('+/-')
+        elif '+-' in sample:
+          sample, uncertainty = string.split('+-')
+      elif len(values) == 4:
+        sample, _, uncertainty, units = values
     precision = None
     digital = False
     analog = False
@@ -78,7 +107,7 @@ class Measurement:
       elif 'a' in sample:
         analog = True
         sample = sample.replace('a', '')
-    return Measurement(sample.strip(), precision=precision, uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty), digital=digital, analog=analog)
+    return Measurement(sample.strip(), precision=precision, uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty), digital=digital, analog=analog, units=units)
   
   def toAbsolute(self):
     if self.uncertaintyPercent and isinstance(self.uncertainty, SigFig):
@@ -104,7 +133,7 @@ class Measurement:
     return Measurement(self.sample.deepCopy(), uncertainty = self.uncertainty.deepCopy() if self.uncertainty is not None else None, uncertaintyPercent = self.uncertaintyPercent)
   
   def __str__(self):
-    return str(self.sample) + (f' +/- {self.uncertainty}' + ('%' if self.uncertaintyPercent else '') if isinstance(self.uncertainty, SigFig) else '')
+    return str(self.sample) + (f' +/- {self.uncertainty}' + ('%' if self.uncertaintyPercent else '') if isinstance(self.uncertainty, SigFig) else '') + (f' {self.units}' if self.units is not None else '')
 
   def __repr__(self):
     return str(self)

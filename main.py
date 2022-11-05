@@ -17,7 +17,7 @@ from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from autop import AutoP
 from packager import Packager
 
-print(Measurement.fromStr('5.50a'))
+print(Measurement.fromStr('5.50 +- 3.490% (kg*m)/s^2'))
 print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
 print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
 # physics_solver()
