@@ -85,8 +85,8 @@ class Measurement:
     sample = string.strip()
     uncertainty = None
     units = None
-    values = sample.split(' ')
-    if '+/-' or '+-' in sample:
+    values = sample.split()
+    if '+/-' in sample or '+-' in sample:
       if len(values) == 3:
         if '+/-' in sample:
           sample, uncertainty = string.split('+/-')
@@ -94,6 +94,9 @@ class Measurement:
           sample, uncertainty = string.split('+-')
       elif len(values) == 4:
         sample, _, uncertainty, units = values
+    else:
+      if len(values) == 2:
+        sample, units = values
     precision = None
     digital = False
     analog = False
