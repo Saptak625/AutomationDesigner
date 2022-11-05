@@ -5,6 +5,7 @@ from includes.equation import Equation
 from includes.sigfig import SigFig
 from includes.measurement import Measurement
 from includes.flm.factor import Factor
+from includes.flm.flm import FLM
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
 from includes.chemistry.chemicalequation import ChemicalEquation
@@ -17,9 +18,10 @@ from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from autop import AutoP
 from packager import Packager
 
-print(Measurement.fromStr('5.50 +- 3.490% (m*kg)/m*s^2') * Measurement.fromStr('2c s^2/kg'))
-print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
-print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
+print(Measurement.fromStr('5.50 g H/mol H')*Measurement.fromStr('3.34 mol H'))
+# print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
+# print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
+# print(FLM('v', '(2.0d g H) // 1c', '(2.0d m/s) // 1c')
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
 # print(e)

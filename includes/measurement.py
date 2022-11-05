@@ -47,19 +47,19 @@ class Measurement:
     self.uncertaintyPercent = uncertaintyPercent
 
     #Chemistry Percent Rules(if <2%, 2 sig figs. Else 1 sig fig)
-    if self.uncertaintyPercent:
+    if self.uncertainty is not None and self.uncertaintyPercent:
       self.uncertainty = SigFig(str(self.uncertainty.decimalValue), sigfigs=(2 if self.uncertainty < SigFig('2', constant=True) else 1))
 
     #Determine Units
     #Will use units class to allow for conversions later.
     self.units = units
-    self.nUnits = self.units.replace(' ', '').split('*') if self.units is not None else []
+    self.nUnits = self.units.split('*') if self.units is not None else []
     self.dUnits = []
     if self.units is not None:
       if '/' in units:
         nUnitsStr, dUnitsStr = self.units.split('/')
-        nUnitsStr = nUnitsStr.strip('() ').replace(' ', '')
-        dUnitsStr = dUnitsStr.strip('() ').replace(' ', '')
+        nUnitsStr = nUnitsStr.strip('() ')
+        dUnitsStr = dUnitsStr.strip('() ')
         self.nUnits = nUnitsStr.split('*')
         self.dUnits = dUnitsStr.split('*')
         if '^' in nUnitsStr:
@@ -101,11 +101,13 @@ class Measurement:
           sample, uncertainty = string.split('+/-')
         elif '+-' in sample:
           sample, uncertainty = string.split('+-')
-      elif len(values) == 4:
-        sample, _, uncertainty, units = values
+      elif len(values) >= 4:
+        sample, _, uncertainty, *units = values
+        units = ' '.join(units)
     else:
-      if len(values) == 2:
-        sample, units = values
+      if len(values) >= 2:
+        sample, *units = values
+        units = ' '.join(units)
     precision = None
     digital = False
     analog = False
@@ -184,7 +186,7 @@ class Measurement:
     uncertainties = [Measurement.absolute(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:
       uSum += u
-    return Measurement(self.sample + other.sample, uncertainty=uSum, units=self.units)
+    return Measurement(self.sample + other.sample, uncertainty=uSum if uncertainties else None, units=self.units)
   
   def __radd__(self, other):
     return self + other
@@ -201,7 +203,7 @@ class Measurement:
     for u in uncertainties:
       uSum += u
     nUnits, dUnits = Measurement.multUnits(self.nUnits, self.dUnits, other.nUnits, other.dUnits)
-    return Measurement(self.sample * other.sample, uncertainty=uSum, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
+    return Measurement(self.sample * other.sample, uncertainty=uSum if uncertainties else None, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
   
   def __rmul__(self, other):
     return self * other
@@ -212,7 +214,7 @@ class Measurement:
     for u in uncertainties:
       uSum += u
     nUnits, dUnits = Measurement.multUnits(self.nUnits, self.dUnits, other.dUnits, other.nUnits)
-    return Measurement(self.sample / other.sample, uncertainty=uSum, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
+    return Measurement(self.sample / other.sample, uncertainty=uSum if uncertainties else None, uncertaintyPercent=True, units=Measurement.formatUnits(nUnits, dUnits))
     
   def __rtruediv__(self, other):
     return other / self
