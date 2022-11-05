@@ -18,7 +18,9 @@ from autop import AutoP
 from packager import Packager
 
 
-print(Factor(Measurement('5.50', uncertainty="2")))
+print(Factor(Measurement('5.50', U='2')))
+print(Factor.fromStr('(2.0 +- 0.1 m/s)//(0.04 +- 4% kg)'))
+print(SigFig('2.0')/SigFig('1', constant=True))
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
 # print(e)

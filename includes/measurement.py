@@ -92,7 +92,11 @@ class Measurement:
     return neg
 
   def __add__(self, other):
-    return Measurement(self.sample + other.sample, uncertainty=Measurement.absolute(self).uncertainty + Measurement.absolute(other).uncertainty)
+    uSum = SigFig('0', constant=True)
+    uncertainties = [Measurement.absolute(i).uncertainty for i in [self, other] if i.uncertainty is not None]
+    for u in uncertainties:
+      uSum += u
+    return Measurement(self.sample + other.sample, uncertainty=uSum)
   
   def __radd__(self, other):
     return self + other
@@ -104,13 +108,21 @@ class Measurement:
     return -self + other
 
   def __mul__(self, other):
-    return Measurement(self.sample * other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty if self.uncertainty is not None and other.uncertainty is not None else (Measurement.percent(self).uncertainty if self.uncertainty is not None else (Measurement.percent(other).uncertainty if other.uncertainty is not None else None)), uncertaintyPercent=True)
+    uSum = SigFig('0', constant=True)
+    uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
+    for u in uncertainties:
+      uSum += u
+    return Measurement(self.sample * other.sample, uncertainty=uSum, uncertaintyPercent=True)
   
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
-    return Measurement(self.sample / other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty, uncertaintyPercent=True)
+    uSum = SigFig('0', constant=True)
+    uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
+    for u in uncertainties:
+      uSum += u
+    return Measurement(self.sample / other.sample, uncertainty=uSum, uncertaintyPercent=True)
     
   def __rtruediv__(self, other):
     return other / self
