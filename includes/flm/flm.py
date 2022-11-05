@@ -11,5 +11,14 @@ class FLM:
     for i in self.factors[1:]:
       self.result *= i.value
 
+  def fromStr(string):
+    name, factorString = string.strip().split('=')
+    name = name.strip()
+    factorString = tuple(i.strip('() ') for i in factorString.strip().split('*'))
+    return FLM(name, *factorString)
+  
   def __str__(self):
-    return self.name + ' = ' + '*'.join([f'({i})' for i in self.factors])  + ' = ' + str(self.result)
+    return self.name + ' = ' + ' * '.join([f'({i})' for i in self.factors])  + ' = ' + str(self.result)
+
+  def __repr__(self):
+    return str(self)

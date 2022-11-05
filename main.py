@@ -18,10 +18,11 @@ from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from autop import AutoP
 from packager import Packager
 
-print(Measurement.fromStr('5.50 g H/mol H')*Measurement.fromStr('3.34 mol H'))
+# print(Measurement.fromStr('5.50 g H/mol H')*Measurement.fromStr('3.34 mol H'))
 # print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
 # print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
-# print(FLM('v', '(2.0d g H) // 1c', '(2.0d m/s) // 1c')
+# print(FLM('Stoichiometry for H2O', '143.4d g O2 // 1c', '1 mol O2 // 32.00 g O2', '2 mol H2O // 1 mol O2', '18.02 g H2O // 1 mol H2O'))
+# print(FLM.fromStr('Stoichiometry for H2O = 143.4d g O2 // 1c * 1 mol O2 // 32.00 g O2 * 2 mol H2O // 1 mol O2 * 18.02 g H2O // 1 mol H2O'))
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
 # print(e)
