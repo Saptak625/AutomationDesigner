@@ -29,7 +29,7 @@ class Equation:
     return s
 
   def substitute(self, dict):
-    return Equation.fromEq(self.variables, self.equation.subs([(Sy(key), float(dict[key])) for key in dict]))
+    return Equation.fromEq(self.variables, self.equation.subs([(Sy(key), dict[key]) for key in dict]))
 
   def getVars(self):
     return self.equation.free_symbols

@@ -1,7 +1,18 @@
 from includes.sigfig import SigFig
 
 class Measurement:
-  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False):
+  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False, P=None, U=None, UP=False, D=False, A=False):
+    if P is not None:
+      precision = P
+    if U is not None:
+      uncertainty = U
+    if UP is not False:
+      uncertaintyPercent = UP
+    if D is not False:
+      digital = D
+    if A is not False:
+      analog = A
+    
     if not isinstance(sample, SigFig):
       if '(' in sample or '[' in sample:
         sample, precision = sample.split()
@@ -9,7 +20,13 @@ class Measurement:
           precision = int(precision[1:-1]) #Precision in Sig Figs
         except ValueError:
           raise Exception('Measurement Error: Invalid Literal for Sig Fig Precision.')
-    self.sample = SigFig(sample, sigfigs=precision) if not isinstance(sample, SigFig) else sample
+    if not isinstance(sample, SigFig):
+      if precision == float('inf'):
+        self.sample = SigFig(sample, constant=True)
+      else:
+        self.sample = SigFig(sample, sigfigs=precision) 
+    else:
+      self.sample = sample
 
     #Automatic Determination of Uncertainty based on Device
     self.uncertainty = None
@@ -31,6 +48,15 @@ class Measurement:
     if self.uncertaintyPercent:
       self.uncertainty = SigFig(str(self.uncertainty.decimalValue), sigfigs=(2 if self.uncertainty < SigFig('2', constant=True) else 1))
 
+  def fromStr(string):
+    sample = string
+    uncertainty = None
+    if '+/-' in string:
+      sample, uncertainty = string.split('+/-')
+    elif '+-' in string:
+      sample, uncertainty = string.split('+-')
+    return Measurement(sample.strip(), uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty))
+  
   def toAbsolute(self):
     if self.uncertaintyPercent and isinstance(self.uncertainty, SigFig):
       self.uncertaintyPercent = False
@@ -52,7 +78,7 @@ class Measurement:
     return m.deepCopy().toPercent()
   
   def deepCopy(self):
-    return Measurement(self.sample.deepCopy(), uncertainty = self.uncertainty.deepCopy(), uncertaintyPercent = self.uncertaintyPercent)
+    return Measurement(self.sample.deepCopy(), uncertainty = self.uncertainty.deepCopy() if self.uncertainty is not None else None, uncertaintyPercent = self.uncertaintyPercent)
   
   def __str__(self):
     return str(self.sample) + (f' +/- {self.uncertainty}' + ('%' if self.uncertaintyPercent else '') if isinstance(self.uncertainty, SigFig) else '')
@@ -78,7 +104,7 @@ class Measurement:
     return -self + other
 
   def __mul__(self, other):
-    return Measurement(self.sample * other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty, uncertaintyPercent=True)
+    return Measurement(self.sample * other.sample, uncertainty=Measurement.percent(self).uncertainty + Measurement.percent(other).uncertainty if self.uncertainty is not None and other.uncertainty is not None else (Measurement.percent(self).uncertainty if self.uncertainty is not None else (Measurement.percent(other).uncertainty if other.uncertainty is not None else None)), uncertaintyPercent=True)
   
   def __rmul__(self, other):
     return self * other
@@ -88,3 +114,9 @@ class Measurement:
     
   def __rtruediv__(self, other):
     return other / self
+
+  def __pow__(self, integer):
+    product = Measurement('1', precision=float('inf'))
+    for i in range(integer):
+      product *= self
+    return product

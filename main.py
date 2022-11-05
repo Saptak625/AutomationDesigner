@@ -4,6 +4,7 @@ from includes.inputs import numericInput, choiceInput
 from includes.equation import Equation
 from includes.sigfig import SigFig
 from includes.measurement import Measurement
+from includes.flm.factor import Factor
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
 from includes.chemistry.chemicalequation import ChemicalEquation
@@ -17,11 +18,19 @@ from autop import AutoP
 from packager import Packager
 
 
+print(Factor(Measurement('5.50', uncertainty="2")))
 # physics_solver()
-a=Measurement('5.50', uncertainty="2")
-b=Measurement('10.0', uncertainty="1")
-m = a * b 
-print(m, a, b)
+# e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
+# print(e)
+# equation = e.replace({'u': "M('5.50', U='2')", 'a': "M('1.38', U='2')", 't': "M('5.9', U='1')"})
+# exec('from includes.measurement import Measurement as M')
+# value=eval('='.join(equation.split('=')[1:]))
+# print(value)
+
+# a=Measurement('5.50', uncertainty="2")
+# b=Measurement('10.0', uncertainty="1")
+# m = a ** 2 
+# print(m, a, b)
 # s = ((SigFig('3') / SigFig('1.87')) + SigFig('5.87')) * SigFig('3.14', constant=True)
 # print(s, s.sigfigs, s.decimals)
 # print(-SigFig('6.02E23', constant=True))
