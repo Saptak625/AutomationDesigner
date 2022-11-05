@@ -1,17 +1,19 @@
 from includes.sigfig import SigFig
 
 class Measurement:
-  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False, P=None, U=None, UP=False, D=False, A=False):
+  def __init__(self, sample, precision=None, uncertainty=None, uncertaintyPercent=False, digital=False, analog=False, units="", P=None, U=None, UP=False, D=False, A=False, UN=""):
     if P is not None:
       precision = P
     if U is not None:
       uncertainty = U
-    if UP is not False:
+    if UP:
       uncertaintyPercent = UP
-    if D is not False:
+    if D:
       digital = D
-    if A is not False:
+    if A:
       analog = A
+    if UN != "":
+      units = UN
     
     if not isinstance(sample, SigFig):
       if '(' in sample or '[' in sample:
@@ -31,7 +33,7 @@ class Measurement:
     #Automatic Determination of Uncertainty based on Device
     self.uncertainty = None
     if analog:
-      self.uncertainty = SigFig(f"5e{self.sample.decimals}", decimals=self.sample.decimals)
+      self.uncertainty = SigFig(f"5e{self.sample.decimals-1}", decimals=self.sample.decimals-1)
     elif digital:
       self.uncertainty = SigFig(f"1e{self.sample.decimals}", decimals=self.sample.decimals)
     
@@ -48,6 +50,14 @@ class Measurement:
     if self.uncertaintyPercent:
       self.uncertainty = SigFig(str(self.uncertainty.decimalValue), sigfigs=(2 if self.uncertainty < SigFig('2', constant=True) else 1))
 
+    #Determine Units
+    self.nUnits = units.replace(' ', '').split('*')
+    self.dUnits = []
+    if '/' in units:
+      nUnitsStr, dUnitsStr = units.split('/')
+      self.nUnits = nUnitsStr.replace(' ', '').split('*')
+      self.dUnits = dUnitsStr.replace(' ', '').split('*')
+
   def fromStr(string):
     sample = string
     uncertainty = None
@@ -55,7 +65,20 @@ class Measurement:
       sample, uncertainty = string.split('+/-')
     elif '+-' in string:
       sample, uncertainty = string.split('+-')
-    return Measurement(sample.strip(), uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty))
+    precision = None
+    digital = False
+    analog = False
+    if uncertainty is None:
+      if 'c' in sample:
+        precision = float('inf')
+        sample = sample.replace('c', '')
+      elif 'd' in sample:
+        digital = True
+        sample = sample.replace('d', '')
+      elif 'a' in sample:
+        analog = True
+        sample = sample.replace('a', '')
+    return Measurement(sample.strip(), precision=precision, uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty), digital=digital, analog=analog)
   
   def toAbsolute(self):
     if self.uncertaintyPercent and isinstance(self.uncertainty, SigFig):

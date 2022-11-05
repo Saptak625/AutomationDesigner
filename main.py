@@ -17,10 +17,9 @@ from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from autop import AutoP
 from packager import Packager
 
-
-print(Factor(Measurement('5.50', U='2')))
-print(Factor.fromStr('(2.0 +- 0.1 m/s)//(0.04 +- 4% kg)'))
-print(SigFig('2.0')/SigFig('1', constant=True))
+print(Measurement.fromStr('5.50a'))
+print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
+print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
 # print(e)
