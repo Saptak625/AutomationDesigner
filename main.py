@@ -13,6 +13,8 @@ from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
 from includes.chemistry.chemical_equation_solver import chemical_equation_solver
+from includes.chemistry.stoichiometry import Stoichiometry, stoichiometry
+from includes.chemistry.limiting_reagent import limiting_reagent
 
 from autop import AutoP
 from packager import Packager
@@ -49,13 +51,19 @@ from packager import Packager
 # print(Compound('2H2O').composition)
 # print(Element('Xe').mass)
 
-p=AutoP('chemistry/stoichiometry')
-p.new()
-p.generate()
+# print(max(Measurement.fromStr('5.50d'), Measurement('4.43', uncertainty="2")))
+# p=AutoP('chemistry/stoichiometry')
+# p.new()
+# p.generate()
 
-from includes.chemistry.stoichiometry import stoichiometry
-
-stoichiometry(eq=ChemicalEquation('H2 + O2 = H2O'), s=Compound('O2'), e=Compound('H2O'), m=Measurement.fromStr('5.50d g O2'))
+# limiting_reagent()
+# s = Stoichiometry(ChemicalEquation('CO2 + H2O = C6H12O6 + O2'))
+# flms = s.limitingReagent({'CO2': Measurement.fromStr('37d g CO2'), 'H2O': Measurement.fromStr('13.2d g H2O')})
+# print('\n\n'.join([str(i) for i in flms[0]]))
+# print()
+# print(flms[1])
+# print()
+# print('\n\n'.join([str(i) for i in flms[2]]))
 # SN('6.7')
 
 # from includes.chemistry.chemical_node_charts import chemical_node_charts

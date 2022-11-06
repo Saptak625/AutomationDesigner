@@ -10,7 +10,6 @@ class FLM:
     self.result = self.factors[0].value
     for i in self.factors[1:]:
       self.result *= i.value
-      print(i.value, i.value.sample.sigfigs, self.result)
 
   def fromStr(string):
     name, factorString = string.strip().split('=')

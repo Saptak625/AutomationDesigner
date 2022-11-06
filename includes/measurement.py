@@ -175,7 +175,22 @@ class Measurement:
     if len(combinedDUnits) > 1:
       dUnitsStr = '(' + dUnitsStr + ')'
     return None if nUnitsStr == '1' and dUnitsStr == '' else nUnitsStr + (f'/{dUnitsStr}' if dUnitsStr else '')
-    
+
+  def __eq__(self, other):
+    return self.sample == other.sample
+
+  def __lt__(self, other):
+    return self.sample < other.sample
+
+  def __gt__(self, other):
+    return self.sample > other.sample
+
+  def __le__(self, other):
+    return self < other or self == other
+
+  def __ge__(self, other):
+    return self > other or self == other
+  
   def __neg__(self):
     neg = self.deepCopy()
     neg.sample = -self.sample

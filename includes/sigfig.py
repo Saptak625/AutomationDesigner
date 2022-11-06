@@ -67,13 +67,13 @@ class SigFig:
     return str(self)
 
   def __eq__(self, other):
-    return self.decimalValue == other.decimalValue
+    return self.value == other.value
 
   def __lt__(self, other):
-    return self.decimalValue < other.decimalValue
+    return self.value < other.value
 
   def __gt__(self, other):
-    return self.decimalValue > other.decimalValue
+    return self.value > other.value
 
   def __le__(self, other):
     return self < other or self == other
