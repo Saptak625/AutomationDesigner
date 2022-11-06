@@ -1,4 +1,5 @@
 from includes.measurement import Measurement
+from includes.equation import Equation
 from includes.chemistry.compound import Compound
 from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.flm.flm import FLM
@@ -65,9 +66,15 @@ class Stoichiometry:
     limitingReagent = self.eq.reactantCompounds[limitingReagentIndex]
 
     #Excess Reactants
-    reactantFLMs = [self.stoichiometry(self.eq.reactantCompounds[0], c, minMeasurement) for c in self.eq.reactantCompounds if c != limitingReagent]
-    #Add based on Equation Parsing
+    reactantCalcs = []
+    for c in self.eq.reactantCompounds:
+      if c != limitingReagent:
+        s = self.stoichiometry(self.eq.reactantCompounds[0], c, minMeasurement)
+        e = Equation(['r', 'a', 'e'], f'Excess {c}', 'Amount Provided - Amount Expected', verbose={f'Excess {c}': 'r', 'Amount Provided': 'a', 'Amount Expected': 'e'})
+        actual = mDict[c.string] * Measurement.fromStr(f'{c.mass} g {c}/mol {c}') if 'mol' in mDict[c.string].units else mDict[c.string]
+        ans = e.substitute({'a': f'M.fromStr("{actual}")', 'e': f'M.fromStr("{s.result}")'})
+        reactantCalcs.append((s, e, ans))
 
     #Products
     productFLMs = [self.stoichiometry(self.eq.reactantCompounds[0], c, minMeasurement) for c in self.eq.productCompounds]
-    return (reagentFLMs, f'Limiting Reagent is {limitingReagent}.', reactantFLMs, productFLMs)
+    return (reagentFLMs, f'Limiting Reagent is {limitingReagent}.', reactantCalcs, productFLMs)

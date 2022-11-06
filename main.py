@@ -16,6 +16,7 @@ from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from includes.chemistry.stoichiometry import Stoichiometry, stoichiometry
 from includes.chemistry.limiting_reagent import limiting_reagent
 
+
 from autop import AutoP
 from packager import Packager
 
@@ -26,9 +27,9 @@ from packager import Packager
 # print(FLM.fromStr('Stoichiometry for H2O = 143.4d g O2 // 1c * 1 mol O2 // 32.00 g O2 * 2 mol H2O // 1 mol O2 * 18.02 g H2O // 1 mol H2O'))
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
-e=Equation(['r', 'a', 'e'], 'Excess', 'Amount Provided - Amount Expected', verbose={'Excess': 'r', 'Amount Provided': 'a', 'Amount Expected': 'e'})
-print(e)
-print(e.substitute({'a': 1, 'e': 0.5}))
+# e=Equation(['r', 'a', 'e'], 'Excess', 'Amount Provided - Amount Expected', verbose={'Excess': 'r', 'Amount Provided': 'a', 'Amount Expected': 'e'})
+# print(e)
+# print(e.substitute({'a': "M.fromStr('5.65d')", 'e': "M.fromStr('2.322d')"}))
 # equation = e.replace({'u': "M('5.50', U='2')", 'a': "M('1.38', U='2')", 't': "M('5.9', U='1')"})
 # exec('from includes.measurement import Measurement as M')
 # value=eval('='.join(equation.split('=')[1:]))
@@ -54,11 +55,18 @@ print(e.substitute({'a': 1, 'e': 0.5}))
 # print(Element('Xe').mass)
 
 # print(max(Measurement.fromStr('5.50d'), Measurement('4.43', uncertainty="2")))
+# print(Measurement.fromStr(f'2.97 +/- 0.43% g H2'))
+# exec('from includes.measurement import Measurement as M')
+# print(eval("""M.fromStr("5.6 +/- 0.1 g H2") - M.fromStr("2.99 +/- 0.42% g H2")"""))
 # p=AutoP('chemistry/stoichiometry')
 # p.new()
 # p.generate()
 
-# limiting_reagent()
+# p=AutoP('chemistry/limiting_reagent')
+# p.new()
+# p.generate()
+
+limiting_reagent()
 # s = Stoichiometry(ChemicalEquation('CO2 + H2O = C6H12O6 + O2'))
 # flms = s.limitingReagent({'CO2': Measurement.fromStr('37d g CO2'), 'H2O': Measurement.fromStr('13.2d g H2O')})
 # print('\n\n'.join([str(i) for i in flms[0]]))
