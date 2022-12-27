@@ -7,8 +7,8 @@ class Compound(Parser):
   latexPrint = False
 
   def setLatexPrint(value):
-    Compound.latexPrint = value
     Element.setLatexPrint(value)
+    Compound.latexPrint = value
   
   def __init__(self, string):
     super().__init__(string)

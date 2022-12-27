@@ -3,7 +3,7 @@ physics.physicssolver: PhysicsSolver
 physics.physicsequations: variables, equations
 }$
 
-function ${
+function ${{}
   p=PhysicsSolver("Physics Solver", variables(), equations())
   p.solve()
 }$

@@ -42,7 +42,7 @@ def matrix_calculator():
       if choice == 1:
         res = M.inverse(m1)
       elif choice == 2:
-        res = m1.deepCopy().scale(nInput('Enter Fraction Scaler: ', Fraction))
+        res = m1.deepCopy().scale(nInput('Enter Fraction Scaler: ', F))
       elif choice == 3:
         res = m1 * chooseEnteredMatrix('Choose matrix to add with:')
       else:

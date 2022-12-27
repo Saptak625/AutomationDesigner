@@ -1,7 +1,12 @@
-from sympy import var, Eq, solve, Symbol as Sy, Float
+from sympy import var, Eq, solve, Symbol as Sy, Float, latex
 from includes.measurement import Measurement
 
 class Equation:
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Equation.latexPrint = value
+
   def __init__(self, variables, left, right, verbose={}, answer=False):
     self.variables = variables #Variables defined for use. Not necessarily present in equation
     var(' '.join(variables))
@@ -53,7 +58,7 @@ class Equation:
         equation = self.replace(dict)
         exec('from includes.measurement import Measurement as M')
         return Equation(self.variables, self.equationLeft, str(eval('='.join(equation.split('=')[1:]))), answer=True)
-    return Equation.fromEq(self.variables, self.equation.subs([(Sy(key), dict[key]) for key in dict]), verboseLeft=self.equationLeft, verboseRight=self.equationRight, verbose=self.verbose)
+    return Equation.fromEq(self.variables, self.equation.subs([(Sy(key), float(dict[key])) for key in dict]), verboseLeft=self.equationLeft, verboseRight=self.equationRight, verbose=self.verbose)
 
   def getVars(self):
     return self.equation.free_symbols
@@ -66,7 +71,10 @@ class Equation:
       if self.equationLeft is not None and verbose:
         lhs = self.equationLeft
       rhs = (self.equationRight if self.equationRight is not None and verbose else self.equation.rhs) if not isinstance(self.equation.rhs, Float) else float(self.equation.rhs)
-      return f'{lhs} = {rhs}'
+      if Equation.latexPrint:
+        return f'{latex(lhs)} = {latex(rhs)}'
+      else:
+        return f'{lhs} = {rhs}'
 
   def __repr__(self):
     return str(self)

@@ -1,0 +1,5 @@
+a = 5
+b = 4
+c = a // b
+b = a
+print(a, b, c)

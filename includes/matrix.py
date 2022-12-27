@@ -6,7 +6,7 @@ class Matrix:
   latexPrint = False
 
   def setLatexPrint(value):
-    Fraction.latexPrint = value
+    Fraction.setLatexPrint(value)
     Matrix.latexPrint = value
   
   def __init__(self, matrix):
@@ -73,13 +73,15 @@ class Matrix:
             Fraction.inverse(self.matrix[nonZero][columnIndex]),
             nonZero)
           self.rowSwap(rowIndex, nonZero)
-        if self.printWork: print(self)
+        if self.printWork:
+          print(self)
         for i in range(rowIndex + 1, len(self.matrix)):
           if self.matrix[i][columnIndex] != Fraction(0, 1):
             self.rowMultiplication(-self.matrix[i][columnIndex], rowIndex)
             self.rowAddition(rowIndex, i)
             self.rowMultiplication(Fraction.inverse(self.matrix[rowIndex][columnIndex]), rowIndex)
-            if self.printWork: print(self)
+            if self.printWork:
+              print(self)
         rowIndex += 1
         if rowIndex >= len(self.matrix):
           break
@@ -94,7 +96,8 @@ class Matrix:
             self.rowMultiplication(-self.matrix[i][columnIndex], rowIndex)
             self.rowAddition(rowIndex, i)
             self.rowMultiplication(Fraction.inverse(self.matrix[rowIndex][columnIndex]), rowIndex)
-            if self.printWork: print(self)
+            if self.printWork:
+              print(self)
         rowIndex += 1
         if rowIndex >= len(self.matrix):
           break

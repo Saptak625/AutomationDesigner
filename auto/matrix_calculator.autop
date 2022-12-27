@@ -5,7 +5,7 @@ fraction: Fraction as F
 title: title
 }$
 
-function ${
+function ${{}
   title('Matrix Calculator')
   def matrixLabels(matrices):
     return [f'[{chr(i+65)}] {m.dimensions()[0]}x{m.dimensions()[1]}' if m else f'[{chr(i+65)}] (empty)' for i, m in enumerate(matrices)]
@@ -44,7 +44,7 @@ function ${
       if choice == 1:
         res = M.inverse(m1)
       elif choice == 2:
-        res = m1.deepCopy().scale(nInput('Enter Fraction Scaler: ', Fraction))
+        res = m1.deepCopy().scale(nInput('Enter Fraction Scaler: ', F))
       elif choice == 3:
         res = m1 * chooseEnteredMatrix('Choose matrix to add with:')
       else:

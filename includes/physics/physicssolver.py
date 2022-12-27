@@ -43,6 +43,7 @@ class PhysicsSolver: #Single-Step
     print(f'Substituted Equation: {" and ".join([i.replace(inputs) for i in newEquations])}')
   
     print('\nS:')
+    print(inputs)
     answers = [str(i.substitute(inputs)) for i in newEquations]
     print(f'Answer: {" and ".join(answers)}')
     if len(answers) > 1:

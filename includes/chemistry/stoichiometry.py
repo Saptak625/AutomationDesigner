@@ -27,6 +27,13 @@ def stoichiometry(eq = None, s = None, e = None, m = None, eMols = False):
   return flm
 
 class Stoichiometry:
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Stoichiometry.latexPrint = value
+    Equation.setLatexPrint(value)
+    ChemicalEquation.setLatexPrint(value)
+
   def __init__(self, eq):
     typecheck(eq, ChemicalEquation)
     self.eq = eq

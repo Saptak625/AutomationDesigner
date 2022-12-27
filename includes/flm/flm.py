@@ -2,6 +2,12 @@ from includes.measurement import Measurement
 from includes.flm.factor import Factor
 
 class FLM:
+  latexPrint = False
+
+  def setLatexPrint(value):
+    Factor.setLatexPrint(value)
+    FLM.latexPrint = value
+
   def __init__(self, name, *args):
     self.name = name
     self.factors = tuple(Factor.fromStr(i) for i in args)

@@ -4,6 +4,7 @@ from includes.inputs import numericInput, choiceInput
 from includes.equation import Equation
 from includes.sigfig import SigFig
 from includes.measurement import Measurement
+from includes.scripting.scripting import Scripting
 from includes.flm.factor import Factor
 from includes.flm.flm import FLM
 from includes.chemistry.compound import Compound
@@ -20,15 +21,29 @@ from includes.chemistry.limiting_reagent import limiting_reagent
 from autop import AutoP
 from packager import Packager
 
+with open('script.txt', 'r') as f:
+  code = f.read()
+  s=Scripting(code)
+  s.execute()
+  print(s)
+
+# Stoichiometry.setLatexPrint(True)
+
+# s = Stoichiometry(ChemicalEquation('CO2 + H2O = C6H12O6 + O2'))
+# flms = s.limitingReagent({'CO2': Measurement.fromStr('37d g CO2'), 'H2O': Measurement.fromStr('13.2d g H2O')})
+# print(flms)
+# print('\n\n'.join([str(i) for i in flms[0]]))
 # print(Measurement.fromStr('5.50 g H/mol H')*Measurement.fromStr('3.34 mol H'))
 # print(Factor.fromStr('(2.0 +- 0.1 m/s) // (1c)').value)
 # print(Factor.fromStr('(2.0d m/s) // (0.04 +- 4% kg)'))
 # print(FLM('Stoichiometry for H2O', '143.4d g O2 // 1c', '1 mol O2 // 32.00 g O2', '2 mol H2O // 1 mol O2', '18.02 g H2O // 1 mol H2O'))
 # print(FLM.fromStr('Stoichiometry for H2O = 143.4d g O2 // 1c * 1 mol O2 // 32.00 g O2 * 2 mol H2O // 1 mol O2 * 18.02 g H2O // 1 mol H2O'))
+# Equation.latexPrint = True
 # physics_solver()
 # e=Equation(['s', 'u', 'v', 'a', 't', 'F', 'm', 'p', 'deltav', 'J', 'W', 'K', 'U', 'g', 'h'], 'v', 'u+a*t')
 # e=Equation(['r', 'a', 'e'], 'Excess', 'Amount Provided - Amount Expected', verbose={'Excess': 'r', 'Amount Provided': 'a', 'Amount Expected': 'e'})
 # print(e)
+# print(e.substitute({'a': 4, 'e': 3}))
 # print(e.substitute({'a': "M.fromStr('5.65d')", 'e': "M.fromStr('2.322d')"}))
 # equation = e.replace({'u': "M('5.50', U='2')", 'a': "M('1.38', U='2')", 't': "M('5.9', U='1')"})
 # exec('from includes.measurement import Measurement as M')
@@ -62,14 +77,13 @@ from packager import Packager
 # p.new()
 # p.generate()
 
-# p=AutoP('chemistry/limiting_reagent')
-# p.new()
+# p=AutoP('chemistry/stoichiometry')
 # p.generate()
 
-limiting_reagent()
-# s = Stoichiometry(ChemicalEquation('CO2 + H2O = C6H12O6 + O2'))
-# flms = s.limitingReagent({'CO2': Measurement.fromStr('37d g CO2'), 'H2O': Measurement.fromStr('13.2d g H2O')})
-# print('\n\n'.join([str(i) for i in flms[0]]))
+
+# print(Equation(['v', 'u', 'a', 't'], 'v', 'u+a**t'))
+
+# limiting_reagent()
 # print()
 # print(flms[1])
 # print()

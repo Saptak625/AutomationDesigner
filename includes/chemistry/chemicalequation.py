@@ -1,5 +1,4 @@
 from includes.parser import Parser
-from includes.chemistry.element import Element
 from includes.chemistry.compound import Compound
 from includes.matrix import Matrix
 from includes.fraction import Fraction
@@ -9,9 +8,9 @@ class ChemicalEquation(Parser):
   latexPrint = False
 
   def setLatexPrint(value):
-    ChemicalEquation.latexPrint = value
     Compound.setLatexPrint(value)
     Matrix.setLatexPrint(value)
+    ChemicalEquation.latexPrint = value
   
   def __init__(self, equationString):
     super().__init__(equationString)
