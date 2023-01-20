@@ -33,7 +33,7 @@ class Measurement:
     #Automatic Determination of Uncertainty based on Device
     self.uncertainty = None
     if analog:
-      self.uncertainty = SigFig(f"5e{self.sample.decimals-1}", decimals=self.sample.decimals-1)
+      self.uncertainty = SigFig(f"5e{self.sample.decimals}", decimals=self.sample.decimals)
     elif digital:
       self.uncertainty = SigFig(f"1e{self.sample.decimals}", decimals=self.sample.decimals)
     
