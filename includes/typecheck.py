@@ -1,5 +1,5 @@
 def typecheck(check, *args):
-  if not (any([isinstance(check, a) for a in args if a is not None]) or (None in args and check is not None)):
+  if not (any([isinstance(check, a) for a in args if a is not None]) or (None in args and check is None)):
     raise TypeError(f'Check type "{type(check)}" did not match type "{args}."')
 
 def typecheckArray(checkArray, *args, dimension = 1):

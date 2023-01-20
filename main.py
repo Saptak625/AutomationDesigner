@@ -21,11 +21,13 @@ from includes.chemistry.limiting_reagent import limiting_reagent
 from autop import AutoP
 from packager import Packager
 
-with open('script.txt', 'r') as f:
-  code = f.read()
-  s=Scripting(code)
-  s.execute()
-  print(s)
+print(ChemicalEquation('H2 + O2 = H2O'))
+
+# with open('script.txt', 'r') as f:
+#   code = f.read()
+#   s=Scripting(code)
+#   s.execute()
+#   print(s)
 
 # Stoichiometry.setLatexPrint(True)
 
@@ -107,3 +109,10 @@ with open('script.txt', 'r') as f:
 # print(F(-1, 2))
 # Matrix.setLatexPrint(True)
 # print(Matrix([[F(1,1), F(2, 1)], [F(3, 1), F(-5,7)], [F(6, 1), F(-10,7)]]))
+
+# Packager('Chemistry Bundle V2',
+#          ['includes/chemistry/chemical_equation_solver.py',
+#           'includes/chemistry/chemical_node_charts.py',
+#           'includes/chemistry/stoichiometry.py',
+#           'includes/chemistry/limiting_reagent.py'
+#          ]).package()
