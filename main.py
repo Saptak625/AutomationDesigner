@@ -24,8 +24,21 @@ from packager import Packager
 
 import pandas as pd
 
-hl = HessLaw([ChemicalEquation('2H2(g)+O2(g)=2H2O(g)'), ChemicalEquation('3O2(g)=2O3(g)')], [-483.6, -2940.1], ChemicalEquation('3H2(g)+O3(g)=3H2O(g)'))
+
+hl = HessLaw([ChemicalEquation('H2+F2=2HF'), ChemicalEquation('C+2F2=CF4'), ChemicalEquation('2C+2H2=C2H4')], [Measurement.fromStr('-537 kJ/mol'), Measurement.fromStr('-680 kJ/mol'), Measurement.fromStr('52.3 kJ/mol')], ChemicalEquation('C2H4+6F2=2CF4+4HF'))
 hl.solve()
+print(hl)
+
+# tempChange = Measurement.fromStr('11.6d')
+# mass = Measurement.fromStr('2.016d')
+# q = tempChange * Measurement.fromStr('100.0a') * Measurement.fromStr('4.18')
+# moles = mass / Compound('NaOH').mass
+
+# h = -q/moles
+
+# print('Q',q)
+# print('moles', moles)
+# print('H', h)
 
 # df = pd.DataFrame()
 
@@ -82,9 +95,9 @@ hl.solve()
 # print(SigFig.changeSigFigs("0.02000", 3))
 # print(s.roundToSigFigs(1))
 # matrix_calculator()
-m=Matrix([[2, 0, 3], [1, 3, 0], [0, -2, 1], [-2, 0, -3]])
-m.gaussjordanElimination()
-print(m)
+# m=Matrix([[2, 0, 3], [1, 3, 0], [0, -2, 1], [-2, 0, -3]])
+# m.gaussjordanElimination()
+# print(m)
 
 # Compound.setLatexPrint(True)
 # print(Compound('3[Cr(N2H4CO)6]4[Cr(CN)6]3 (s)'))

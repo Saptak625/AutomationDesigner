@@ -1,6 +1,7 @@
 from includes.typecheck import typecheck
 from includes.gcd import gcd
 from includes.lcm import lcm
+from includes.measurement import Measurement
 
 class Fraction:
   latexPrint = False
@@ -102,6 +103,8 @@ class Fraction:
   def __mul__(self, other):
     if isinstance(other, int) or isinstance(other, float):
       return float(self) * other
+    elif isinstance(other, Measurement):
+      return Measurement.fromFloat(float(self)) * other
     elif isinstance(other, Fraction):
       return Fraction.simplified(Fraction(self.numerator * other.numerator, self.denominator * other.denominator))
     else:

@@ -124,6 +124,9 @@ class Measurement:
         analog = True
         sample = sample.replace('a', '')
     return Measurement(sample.strip(), precision=precision, uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty), digital=digital, analog=analog, units=units)
+
+  def fromFloat(f): #Assume float is a constant with infinite precision and no uncertainty.
+    return Measurement.fromStr(f'{f}c')
   
   def toAbsolute(self):
     if self.uncertaintyPercent and isinstance(self.uncertainty, SigFig):
@@ -241,3 +244,23 @@ class Measurement:
     for i in range(integer):
       product *= self
     return product
+
+  def sum(measurements):
+    s = measurements[0]
+    for i in measurements[1:]:
+      s += i
+    return s
+
+  def max(measurements):
+    m = measurements[0]
+    for i in measurements[1:]:
+      if m < i:
+        m = i
+    return m
+
+  def min(measurements):
+    m = measurements[0]
+    for i in measurements[1:]:
+      if m > i:
+        m = i
+    return m

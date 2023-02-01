@@ -69,4 +69,4 @@ class ChemicalEquation(Parser):
     solution = ChemicalEquation.formatSolution(self.coefficients[0], self.reactantCompounds, textOverride) + " = " + ChemicalEquation.formatSolution(self.coefficients[1], self.productCompounds, textOverride)
     if ChemicalEquation.latexPrint and not textOverride:
       return solution.replace('=', '\\rightarrow')
-    return 'Balanced Equation:\n' + solution
+    return solution
