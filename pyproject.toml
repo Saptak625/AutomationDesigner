@@ -10,6 +10,7 @@ numpy = "^1.22.2"
 replit = "^3.2.4"
 sympy = "^1.10.1"
 mypy = "^0.961"
+pandas = "^1.5.3"
 
 [tool.poetry.dev-dependencies]
 

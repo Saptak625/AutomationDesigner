@@ -10,6 +10,7 @@ from includes.flm.flm import FLM
 from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
 from includes.chemistry.chemicalequation import ChemicalEquation
+from includes.chemistry.thermodynamics.hesslaw import HessLaw
 
 from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
@@ -21,7 +22,26 @@ from includes.chemistry.limiting_reagent import limiting_reagent
 from autop import AutoP
 from packager import Packager
 
-print(ChemicalEquation('H2 + O2 = H2O'))
+import pandas as pd
+
+hl = HessLaw([ChemicalEquation('2H2(g)+O2(g)=2H2O(g)'), ChemicalEquation('3O2(g)=2O3(g)')], [-483.6, -2940.1], ChemicalEquation('3H2(g)+O3(g)=3H2O(g)'))
+hl.solve()
+
+# df = pd.DataFrame()
+
+# df['m_water'] = [Measurement.fromStr('78.701d'), Measurement.fromStr('78.701d')]
+# df['init_m'] = [Measurement.fromStr('110.759d'), Measurement.fromStr('110.759d')] 
+# df['end_m'] = [Measurement.fromStr('109.689d'), Measurement.fromStr('109.689d')] 
+# df['init_t'] = [Measurement.fromStr('21.7d'), Measurement.fromStr('21.7d')]
+# df['end_t'] = [Measurement.fromStr('70.9d'), Measurement.fromStr('70.9d')]
+# df['molar'] = [Measurement.fromStr('46.08c'), Measurement.fromStr('46.08c')]
+
+# df['q'] = df['m_water'] * Measurement.fromStr('4.18c') * (df['end_t']-df['init_t'])
+# df['m_alcohol'] = df['init_m'] - df['end_m']
+# df['mol_alcohol'] = df['m_alcohol'] / df['molar']
+# df['enthalpy'] = -df['q'] / df['mol_alcohol']
+# print(q, m_alcohol, mol_alcohol, enthalpy, sep='\n')
+# print(df.head())
 
 # with open('script.txt', 'r') as f:
 #   code = f.read()
@@ -62,9 +82,9 @@ print(ChemicalEquation('H2 + O2 = H2O'))
 # print(SigFig.changeSigFigs("0.02000", 3))
 # print(s.roundToSigFigs(1))
 # matrix_calculator()
-# m=Matrix([[1, 0, 5, 6], [9, 0, 2, 0], [18, 0, 4, 0]])
-# m.gaussjordanElimination()
-# print(m)
+m=Matrix([[2, 0, 3], [1, 3, 0], [0, -2, 1], [-2, 0, -3]])
+m.gaussjordanElimination()
+print(m)
 
 # Compound.setLatexPrint(True)
 # print(Compound('3[Cr(N2H4CO)6]4[Cr(CN)6]3 (s)'))
