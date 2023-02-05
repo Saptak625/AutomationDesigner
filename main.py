@@ -36,10 +36,10 @@ import pandas as pd
 # q = deltaT * m * c * conv
 # print(q)
 
-m = Measurement.fromStr('1.22d kg')
-p = Measurement.fromStr('2.35a kg * m/s')
-ke = p**2 / (m * 2)
-print(ke)
+# m = Measurement.fromStr('1.22d kg')
+# p = Measurement.fromStr('2.35a kg * m/s')
+# ke = p**2 / (m * 2)
+# print(ke)
 
 # ce = chemical_equation_solver('H2O = H2 + O2')
 # hl = HessLaw([ChemicalEquation('H2+F2=2HF'), ChemicalEquation('C+2F2=CF4'), ChemicalEquation('2C+2H2=C2H4')], [Measurement.fromStr('-537 kJ/mol'), Measurement.fromStr('-680 kJ/mol'), Measurement.fromStr('52.3 kJ/mol')], ChemicalEquation('C2H4+6F2=2CF4+4HF'))
@@ -157,7 +157,7 @@ print(ke)
 
 # chemical_equation_solver()
 
-# Packager('Measurement Bundle',['includes/measurement.py']).package()
+Packager('Measurement Bundle',['includes/measurement.py']).package()
 # F.setLatexPrint(True)
 # print(F(-1, 2))
 # Matrix.setLatexPrint(True)
