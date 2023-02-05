@@ -163,7 +163,7 @@ print(deltaT)
 
 # chemical_equation_solver()
 
-Packager('Measurement Bundle',['includes/measurement.py']).package()
+# Packager('Measurement Bundle',['includes/measurement.py']).package()
 # F.setLatexPrint(True)
 # print(F(-1, 2))
 # Matrix.setLatexPrint(True)
