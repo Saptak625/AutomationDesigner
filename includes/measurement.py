@@ -33,9 +33,9 @@ class Measurement:
     #Automatic Determination of Uncertainty based on Device
     self.uncertainty = None
     if analog:
-      self.uncertainty = SigFig(f"5e{self.sample.decimals}", decimals=self.sample.decimals)
+      self.uncertainty = SigFig(f"5e{self.sample.decimals-1}", decimals=self.sample.decimals-1)
     elif digital:
-      self.uncertainty = SigFig(f"1e{self.sample.decimals}", decimals=self.sample.decimals)
+      self.uncertainty = SigFig(f"1e{self.sample.decimals-1}", decimals=self.sample.decimals-1)
     
     #Main Override
     if uncertainty is not None:
@@ -43,7 +43,7 @@ class Measurement:
         if '%' in uncertainty:
           uncertaintyPercent = True
           uncertainty = uncertainty.replace('%', '')
-      self.uncertainty = SigFig(uncertainty, decimals=self.sample.decimals) if not isinstance(uncertainty, SigFig) else uncertainty
+      self.uncertainty = SigFig(uncertainty, decimals=self.sample.decimals-1) if not isinstance(uncertainty, SigFig) else uncertainty
     self.uncertaintyPercent = uncertaintyPercent
 
     #Chemistry Percent Rules(if <2%, 2 sig figs. Else 1 sig fig)
@@ -53,15 +53,15 @@ class Measurement:
     #Determine Units
     #Will use units class to allow for conversions later.
     self.units = units
-    self.nUnits = self.units.split('*') if self.units is not None else []
+    self.nUnits = [i.strip('() ') for i in self.units.split('*')] if self.units is not None else []
     self.dUnits = []
     if self.units is not None:
       if '/' in units:
         nUnitsStr, dUnitsStr = self.units.split('/')
         nUnitsStr = nUnitsStr.strip('() ')
         dUnitsStr = dUnitsStr.strip('() ')
-        self.nUnits = nUnitsStr.split('*')
-        self.dUnits = dUnitsStr.split('*')
+        self.nUnits = [i.strip('() ') for i in nUnitsStr.split('*')]
+        self.dUnits = [i.strip('() ') for i in dUnitsStr.split('*')]
         if '^' in nUnitsStr:
           newNUnits = []
           for i in self.nUnits:
@@ -177,8 +177,8 @@ class Measurement:
     return (sorted(newNUnits), sorted(newDUnits))
 
   def formatUnits(nUnits, dUnits):
-    combinedNUnits = [i if nUnits.count(i) == 1 else f'{i}^{nUnits.count(i)}' for i in set(nUnits)]
-    combinedDUnits = [i if dUnits.count(i) == 1 else f'{i}^{dUnits.count(i)}' for i in set(dUnits)]
+    combinedNUnits = sorted([i if nUnits.count(i) == 1 else f'{i}^{nUnits.count(i)}' for i in set(nUnits)])
+    combinedDUnits = sorted([i if dUnits.count(i) == 1 else f'{i}^{dUnits.count(i)}' for i in set(dUnits)])
     nUnitsStr = '1' if not nUnits else '*'.join(combinedNUnits)
     dUnitsStr = '' if not dUnits else '*'.join(combinedDUnits)
     if len(combinedNUnits) > 1:
@@ -226,6 +226,8 @@ class Measurement:
     return -self + other
 
   def __mul__(self, other):
+    if isinstance(other, float) or isinstance(other, int):
+      other = Measurement.fromFloat(other)
     uSum = SigFig('0', constant=True)
     uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:
@@ -237,6 +239,8 @@ class Measurement:
     return self * other
 
   def __truediv__(self, other):
+    if isinstance(other, float) or isinstance(other, int):
+      other = Measurement.fromFloat(other)
     uSum = SigFig('0', constant=True)
     uncertainties = [Measurement.percent(i).uncertainty for i in [self, other] if i.uncertainty is not None]
     for u in uncertainties:

@@ -28,6 +28,19 @@ from packager import Packager
 import pandas as pd
 
 
+# Measurement Testing
+# deltaT = Measurement.fromStr('0.55 +/- 0.01 degC')
+# m = Measurement.fromStr('3.42 g H2O')
+# c = Measurement.fromStr('4.18c J/(g H2O * degC)')
+# conv = Measurement.fromStr('0.0001c kJ/J')
+# q = deltaT * m * c * conv
+# print(q)
+
+m = Measurement.fromStr('1.22d kg')
+p = Measurement.fromStr('2.35a kg * m/s')
+ke = p**2 / (m * 2)
+print(ke)
+
 # ce = chemical_equation_solver('H2O = H2 + O2')
 # hl = HessLaw([ChemicalEquation('H2+F2=2HF'), ChemicalEquation('C+2F2=CF4'), ChemicalEquation('2C+2H2=C2H4')], [Measurement.fromStr('-537 kJ/mol'), Measurement.fromStr('-680 kJ/mol'), Measurement.fromStr('52.3 kJ/mol')], ChemicalEquation('C2H4+6F2=2CF4+4HF'))
 # hl.solve()
@@ -144,7 +157,7 @@ import pandas as pd
 
 # chemical_equation_solver()
 
-# Packager('Chemistry Bundle',['includes/chemistry/chemical_equation_solver.py', 'includes/chemistry/chemical_node_charts.py']).package()
+# Packager('Measurement Bundle',['includes/measurement.py']).package()
 # F.setLatexPrint(True)
 # print(F(-1, 2))
 # Matrix.setLatexPrint(True)
