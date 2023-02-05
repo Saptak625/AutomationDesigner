@@ -65,7 +65,7 @@ class Measurement:
         if '%' in uncertainty:
           uncertaintyPercent = True
           uncertainty = uncertainty.replace('%', '')
-      self.uncertainty = SigFig(uncertainty, decimals=self.sample.decimals) if not isinstance(uncertainty, SigFig) else uncertainty
+      self.uncertainty = SigFig(uncertainty, decimals=self.sample.decimals-1) if not isinstance(uncertainty, SigFig) else uncertainty
     self.uncertaintyPercent = uncertaintyPercent
 
     #Chemistry Percent Rules(if <2%, 2 sig figs. Else 1 sig fig)

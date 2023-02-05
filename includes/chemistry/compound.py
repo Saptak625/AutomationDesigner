@@ -26,10 +26,7 @@ class Compound(Parser):
         self.compoundString = self.compoundString[i:].strip()
         break
     self.readByCharacter(self.compoundString, checks = self.checks, endSetup = self.save)
-    self.mass = Measurement.fromStr('0c')
-    for e in self.composition:
-      self.mass += (e.mass * Measurement(str(self.composition[e]), precision=float('inf')))
-  
+    self.mass = Measurement.sum([e.mass * Measurement.fromFloat(self.composition[e]) for e in self.composition])
   def split(self, string):
     if '(s)' in string or '(l)' in string or '(g)' in string or '(aq)' in string:
       if '(s)' in string:
