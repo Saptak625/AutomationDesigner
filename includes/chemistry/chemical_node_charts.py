@@ -2,6 +2,7 @@ from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.fraction import Fraction as F
 from includes.inputs import booleanInput as bInput, numericInput as nInput
 from includes.typecheck import typecheck
+from includes.scripting.logger import log as print
 
 def chemical_node_charts(equation = None, variableSpace = None, idealPaths = True):
   typecheck(equation, ChemicalEquation)

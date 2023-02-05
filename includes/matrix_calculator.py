@@ -2,6 +2,7 @@ from includes.inputs import menu, stringInput as sInput, numericInput as nInput,
 from includes.matrix import Matrix as M
 from includes.fraction import Fraction as F
 from includes.title import title
+from includes.scripting.logger import log as print
 
 def matrix_calculator():
   title('Matrix Calculator')

@@ -3,6 +3,7 @@ chemistry.chemicalequation: ChemicalEquation
 fraction: Fraction as F
 inputs: booleanInput as bInput, numericInput as nInput
 typecheck: typecheck
+scripting.logger: log as print
 }$
 
 function ${{equation = None, variableSpace = None, idealPaths = True}

@@ -1,5 +1,6 @@
-a = 5
-b = 4
-c = a // b
-b = a
-print(a, b, c)
+S.setLatexPrint(True)
+eq = CE('H2 + O2 = 2H2O')
+chemical_equation_solver(eq)
+a = M.fromStr('3 +- 2% mol H2O')
+print(a)
+stoichiometry(eq, 'H2O', 'H2', a)

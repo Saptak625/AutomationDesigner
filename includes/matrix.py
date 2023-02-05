@@ -1,6 +1,7 @@
 from includes.typecheck import typecheckArray
 from includes.lengthcheck import lengthcheckArray
 from includes.fraction import Fraction
+from includes.scripting.logger import log as print
 
 class Matrix:
   latexPrint = False

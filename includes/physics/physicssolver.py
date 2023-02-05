@@ -2,6 +2,7 @@ from includes.fraction import Fraction
 from includes.inputs import choiceInput as cInput, numericInput
 from includes.equation import Equation
 from includes.title import title
+from includes.scripting.logger import log as print
 
 class PhysicsSolver: #Single-Step
   def __init__(self, name, variables, equations):

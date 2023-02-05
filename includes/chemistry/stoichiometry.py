@@ -4,16 +4,25 @@ from includes.chemistry.compound import Compound
 from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.flm.flm import FLM
 from includes.typecheck import typecheck
+from includes.scripting.logger import log as print
 
 def stoichiometry(eq = None, s = None, e = None, m = None, eMols = False):
   start = s
   end = e
   measurement = m
   endMols = eMols
-  typecheck(eq, ChemicalEquation, None)
-  typecheck(start, Compound, None)
-  typecheck(end, Compound, None)
-  typecheck(measurement, Measurement, None)
+  typecheck(eq, ChemicalEquation, str, None)
+  typecheck(start, Compound, str, None)
+  typecheck(end, Compound, str, None)
+  typecheck(measurement, Measurement, str, None)
+  if isinstance(eq, str):
+    eq = ChemicalEquation(eq)
+  if isinstance(start, str):
+    start = Compound(start)
+  if isinstance(end, str):
+    end = Compound(end)
+  if isinstance(measurement, str):
+    measurement = Measurement.fromStr(measurement)
   if eq is None:
     eq = ChemicalEquation(input('Enter whole equation seperated by "=": '))
     start = Compound(input('Starting Compound: '))
@@ -33,6 +42,7 @@ class Stoichiometry:
     Stoichiometry.latexPrint = value
     Equation.setLatexPrint(value)
     ChemicalEquation.setLatexPrint(value)
+    FLM.setLatexPrint(value)
 
   def __init__(self, eq):
     typecheck(eq, ChemicalEquation)

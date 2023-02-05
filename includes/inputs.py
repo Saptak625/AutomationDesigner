@@ -1,6 +1,6 @@
 from includes.fraction import Fraction
 from includes.matrix import Matrix
-
+from includes.scripting.logger import log as print
 
 def stringInput(prompt):
     i = input(prompt)

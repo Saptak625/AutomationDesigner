@@ -2,9 +2,12 @@ from includes.measurement import Measurement
 from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.chemistry.stoichiometry import Stoichiometry
 from includes.typecheck import typecheck
+from includes.scripting.logger import log as print
 
 def limiting_reagent(eq = None):
-  typecheck(eq, ChemicalEquation, None)
+  typecheck(eq, ChemicalEquation, str, None)
+  if isinstance(eq, str):
+    eq = ChemicalEquation(eq)
   if eq is None:
     eq = ChemicalEquation(input('Enter whole equation seperated by "=": '))
     print()

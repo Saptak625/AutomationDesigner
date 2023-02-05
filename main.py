@@ -11,12 +11,15 @@ from includes.chemistry.compound import Compound
 from includes.chemistry.element import Element
 from includes.chemistry.chemicalequation import ChemicalEquation
 from includes.chemistry.thermodynamics.hesslaw import HessLaw
+from includes.chemistry.chemscripting import ChemScripting
 
 from includes.matrix_calculator import matrix_calculator
 from includes.physics.physics_solver import physics_solver
 from includes.chemistry.chemical_equation_solver import chemical_equation_solver
 from includes.chemistry.stoichiometry import Stoichiometry, stoichiometry
 from includes.chemistry.limiting_reagent import limiting_reagent
+
+from includes.scripting.logger import Logger, log as print
 
 
 from autop import AutoP
@@ -25,9 +28,10 @@ from packager import Packager
 import pandas as pd
 
 
-hl = HessLaw([ChemicalEquation('H2+F2=2HF'), ChemicalEquation('C+2F2=CF4'), ChemicalEquation('2C+2H2=C2H4')], [Measurement.fromStr('-537 kJ/mol'), Measurement.fromStr('-680 kJ/mol'), Measurement.fromStr('52.3 kJ/mol')], ChemicalEquation('C2H4+6F2=2CF4+4HF'))
-hl.solve()
-print(hl)
+# ce = chemical_equation_solver('H2O = H2 + O2')
+# hl = HessLaw([ChemicalEquation('H2+F2=2HF'), ChemicalEquation('C+2F2=CF4'), ChemicalEquation('2C+2H2=C2H4')], [Measurement.fromStr('-537 kJ/mol'), Measurement.fromStr('-680 kJ/mol'), Measurement.fromStr('52.3 kJ/mol')], ChemicalEquation('C2H4+6F2=2CF4+4HF'))
+# hl.solve()
+# print(hl)
 
 # tempChange = Measurement.fromStr('11.6d')
 # mass = Measurement.fromStr('2.016d')
@@ -61,6 +65,9 @@ print(hl)
 #   s=Scripting(code)
 #   s.execute()
 #   print(s)
+
+# a = Measurement.fromStr('3 +- 2% mol H2O')
+# stoichiometry(ChemicalEquation('H2O = H2 + O2'), Compound('H2O'), Compound('O2'), a)
 
 # Stoichiometry.setLatexPrint(True)
 

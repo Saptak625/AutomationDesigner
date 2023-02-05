@@ -1,10 +1,13 @@
 import ${
 chemistry.chemicalequation: ChemicalEquation
 typecheck: typecheck
+scripting.logger: log as print
 }$
 
 function ${{eq = None}
-  typecheck(eq, ChemicalEquation, None)
+  typecheck(eq, ChemicalEquation, str, None)
+  if isinstance(eq, str):
+    eq = ChemicalEquation(eq)
   if eq == None:
     eq = ChemicalEquation(input('Enter whole equation seperated by "=": '))
   eq.solve()

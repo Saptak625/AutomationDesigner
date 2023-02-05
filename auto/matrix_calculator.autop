@@ -3,6 +3,7 @@ inputs: menu, stringInput as sInput, numericInput as nInput, matrixInput as mInp
 matrix: Matrix as M
 fraction: Fraction as F
 title: title
+scripting.logger: log as print
 }$
 
 function ${{}

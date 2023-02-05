@@ -105,10 +105,18 @@ class Measurement:
           sample, uncertainty = string.split('+-')
       elif len(values) >= 4:
         sample, _, uncertainty, *units = values
+        if len(units) == 2: # Assuming form will mol H2O
+          if '_' not in units[1]:
+            from includes.chemistry.compound import Compound
+            units[1] = str(Compound(units[1])) # Format Compound String
         units = ' '.join(units)
     else:
       if len(values) >= 2:
         sample, *units = values
+        if len(units) == 2: # Assuming form will mol H2O
+          if '_' not in units[1]:
+            from includes.chemistry.compound import Compound
+            units[1] = str(Compound(units[1])) # Format Compound String
         units = ' '.join(units)
     precision = None
     digital = False

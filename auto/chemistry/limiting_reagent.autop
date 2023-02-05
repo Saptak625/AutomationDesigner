@@ -3,10 +3,13 @@ measurement: Measurement
 chemistry.chemicalequation: ChemicalEquation
 chemistry.stoichiometry: Stoichiometry
 typecheck: typecheck
+scripting.logger: log as print
 }$
 
 function ${{eq = None}
-  typecheck(eq, ChemicalEquation, None)
+  typecheck(eq, ChemicalEquation, str, None)
+  if isinstance(eq, str):
+    eq = ChemicalEquation(eq)
   if eq is None:
     eq = ChemicalEquation(input('Enter whole equation seperated by "=": '))
     print()
