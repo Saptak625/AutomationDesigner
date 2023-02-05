@@ -103,21 +103,21 @@ class SigFig:
     __eq__
     Returns True if the two SigFig objects are equal.
     """
-    return self.value == other.value
+    return self.decimal == other.decimal
 
   def __lt__(self, other):
     """
     __lt__
     Returns True if the SigFig object is less than the other SigFig object.
     """
-    return self.value < other.value
+    return self.decimal < other.decimal
 
   def __gt__(self, other):
     """
     __gt__
     Returns True if the SigFig object is greater than the other SigFig object.
     """
-    return self.value > other.value
+    return self.decimal > other.decimal
 
   def __le__(self, other):
     """
