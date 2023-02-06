@@ -1,4 +1,4 @@
-from includes.sigfig import SigFig
+from pymeasurement.sigfig import SigFig
 
 class Measurement:
   """
@@ -161,11 +161,11 @@ class Measurement:
         sample = sample.replace('a', '')
     return Measurement(sample.strip(), precision=precision, uncertainty=(uncertainty.strip() if isinstance(uncertainty, str) else uncertainty), digital=digital, analog=analog, units=units)
 
-  def fromFloat(f): #Assume float is a constant with infinite precision and no uncertainty.
+  def fromFloat(f, units=''): #Assume float is a constant with infinite precision and no uncertainty.
     """
     Creates a Measurement constant from a float.
     """
-    return Measurement.fromStr(f'{f}c')
+    return Measurement.fromStr(f'{f}c {units}')
   
   def toAbsolute(self):
     """
