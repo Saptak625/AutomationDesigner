@@ -12,7 +12,7 @@ class Matrix:
   
   def __init__(self, matrix):
     processedMatrix = matrix
-    typecheckArray(matrix, Fraction, int, dimension=2)
+    typecheckArray(matrix, Fraction, int, float, dimension=2)
     if len(matrix):
       lengthcheckArray(matrix, len(matrix[0]))
       if len(matrix[0]):
@@ -24,7 +24,9 @@ class Matrix:
           for i in range(len(processedMatrix)):
             for j in range(len(processedMatrix[0])):
               if isinstance(processedMatrix[i][j], int):
-                processedMatrix[i][j] = Fraction(processedMatrix[i][j], 1)
+                processedMatrix[i][j] = Fraction.fromInt(processedMatrix[i][j])
+              elif isinstance(processedMatrix[i][j], float):
+                processedMatrix[i][j] = Fraction.fromFloat(processedMatrix[i][j])
     self.matrix = processedMatrix
     self.printWork = False
 

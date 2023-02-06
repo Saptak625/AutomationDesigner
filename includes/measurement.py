@@ -1,4 +1,4 @@
-from pymeasurement.sigfig import SigFig
+from includes.sigfig import SigFig
 
 class Measurement:
   """
@@ -364,6 +364,8 @@ class Measurement:
     """
     Returns the sum of the given list of Measurement objects.
     """
+    if not measurements:
+      return Measurement.fromStr('0c')
     s = measurements[0]
     for i in measurements[1:]:
       s += i

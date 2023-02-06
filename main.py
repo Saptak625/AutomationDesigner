@@ -1,5 +1,5 @@
 # from includes.matrix import Matrix
-# from includes.fraction import Fraction as F
+from includes.fraction import Fraction as F
 # from includes.inputs import numericInput, choiceInput
 # from includes.equation import Equation
 from includes.sigfig import SigFig
@@ -19,6 +19,8 @@ from includes.measurement import Measurement
 # from includes.chemistry.stoichiometry import Stoichiometry, stoichiometry
 # from includes.chemistry.limiting_reagent import limiting_reagent
 
+from includes.probability.two_event_solver import two_event_solver
+
 # from includes.scripting.logger import Logger, log as print
 
 
@@ -26,16 +28,15 @@ from autop import AutoP
 from packager import Packager
 
 # import pandas as pd
-
-
+two_event_solver()
 # Measurement Testing
 # s = SigFig("0.00324")
 # print(s)
 # print(s.value, s.sigfigs, s.decimals)
 # a = Measurement.fromStr('1.0224d mol H2O')
 # print(a)
-deltaT = Measurement.fromStr('2.001 +- 0.0125 degC')
-print(deltaT)
+# deltaT = Measurement.fromStr('2.001 +- 0.0125 degC')
+# print(deltaT)
 # m = Measurement.fromStr('3.42 g H2O')
 # c = Measurement.fromStr('4.18c J/(g H2O * degC)')
 # conv = Measurement.fromStr('0.0001c kJ/J')

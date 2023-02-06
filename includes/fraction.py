@@ -3,6 +3,8 @@ from includes.gcd import gcd
 from includes.lcm import lcm
 from includes.measurement import Measurement
 
+import math
+
 class Fraction:
   latexPrint = False
 
@@ -19,6 +21,9 @@ class Fraction:
 
   def fromInt(intNumerator):
     return Fraction(intNumerator, 1)
+
+  def fromFloat(f):
+    return Fraction(round(f * 10**15), 10**15).simplified()
 
   def fromStr(string):
     if '/' not in string:
@@ -136,3 +141,11 @@ class Fraction:
     newFraction = fraction.deepCopy()
     newFraction.scale(factor)
     return newFraction
+
+  def sum(fractions):
+    if not fractions:
+      return Fraction(0, 1)
+    s = fractions[0]
+    for i in fractions[1:]:
+      s += i
+    return s
