@@ -28,7 +28,17 @@ from autop import AutoP
 from packager import Packager
 
 # import pandas as pd
-two_event_solver()
+
+r1 = Measurement.fromStr("1000. +- 5% Ohms")
+r2 = Measurement.fromStr("500. +- 5% Ohms")
+r3 = Measurement.fromStr("2000. +- 5% Ohms")
+randUnit = Measurement.fromStr("2.33a g")
+
+series = r1 + r2 + r3
+print(series.toPercent())
+parallel = 1/(1/r1 + 1/r2 + 1/r3)
+print(parallel)
+# two_event_solver()
 # Measurement Testing
 # s = SigFig("0.00324")
 # print(s)

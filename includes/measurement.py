@@ -110,7 +110,9 @@ class Measurement:
         newDUnits.remove(i)
     #Sort units alphabetically
     self.nUnits=sorted(newNUnits)
-    self.dUnits=sorted(newDUnits)
+    self.dUnits=sorted([i for i in newDUnits if i != '1'])
+    for _ in range(self.nUnits.count('1') - (1 if len(self.nUnits) == self.nUnits.count('1') and self.dUnits else 0)):
+      self.nUnits.remove('1')
     #Reformat units string
     self.units = Measurement.formatUnits(self.nUnits, self.dUnits)
 
@@ -349,6 +351,8 @@ class Measurement:
     """
     Returns the quotient of the two Measurement objects.
     """
+    if isinstance(other, float) or isinstance(other, int):
+      other = Measurement.fromFloat(other)
     return other / self
 
   def __pow__(self, integer):
